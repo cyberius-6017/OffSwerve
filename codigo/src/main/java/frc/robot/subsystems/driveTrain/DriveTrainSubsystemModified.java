@@ -30,8 +30,8 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
   Constants.frEncoderId, Constants.frDistanceX, Constants.frDistanceY, Constants.frOffset, false);
  
   private SwerveModule rlModule = new SwerveModule(Constants.rlTurnId, Constants.rlDriveId, 
-  Constants.rlEncoderId, Constants.rlDistanceX, Constants.rlDistanceY, Constants.rlOffset, true); //es importante invertir este, si no gira al revez
- 
+  Constants.rlEncoderId, Constants.rlDistanceX, Constants.rlDistanceY, Constants.rlOffset, true);
+
   private SwerveModule rrModule = new SwerveModule(Constants.rrTurnId, Constants.rrDriveId, 
   Constants.rrEncoderId, Constants.rrDistanceX, Constants.rrDistanceY, Constants.rrOffset, false);
 
@@ -72,6 +72,18 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
     angle *= -1;
     angle *= Constants.pi / 180;
 
+    angle-= (Constants.pi/2);
+
+    
+
+    if (angle > 2 * Constants.pi){
+      angle -= 2* Constants.pi;
+    }
+
+    if (angle < 0){
+      angle += 2 * Constants.pi;
+    }
+    
     return angle;
   }
 
@@ -220,11 +232,17 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
 
 
   public void periodic(){
+    
     positions[0] = flModule.getSwervePosition();
     positions[1] = frModule.getSwervePosition(); 
     positions[2] = rlModule.getSwervePosition();
     positions[3] = rrModule.getSwervePosition(); 
     odometry.update(getRotation2d(), positions);
+
+    SmartDashboard.putNumber("fl angle", flModule.getAdjRadians());
+    SmartDashboard.putNumber("fr angle", frModule.getAdjRadians());
+    SmartDashboard.putNumber("rl angle", rlModule.getAdjRadians());
+    SmartDashboard.putNumber("rr angle", rrModule.getAdjRadians());
 
     
     SmartDashboard.putString("Pose", getPose2d().getTranslation().toString());
@@ -235,7 +253,7 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
   }
 
   public void resetOdometry(){
-    odometry.resetPosition(getRotation2d(), positions, getPose2d());
+     odometry.resetPosition(getRotation2d(), positions, getPose2d());
   }
 
   public void resetDriveEncodersPosition(){

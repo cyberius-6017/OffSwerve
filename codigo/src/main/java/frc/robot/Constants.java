@@ -32,30 +32,30 @@ public final class Constants {
     public static final int rrTurnId = 42;
     public static final int rlTurnId = 52; 
 
-    //offset está en grados
-    public static final double rrOffset = 57.6;
-    public static final double flOffset = 10.9;
-    public static final double frOffset = 94.5;
-    public static final double rlOffset = 66.9;
+    //offset está en radianes
+    public static final double rrOffset = 1.78;
+    public static final double flOffset = 2.61;
+    public static final double frOffset = 3.20;
+    public static final double rlOffset = 5.98;
     
-    public static final double maxDriveSignal = 0.85;
+    public static final double maxDriveSignal = 0.3;
     public static final double driftMinimum = 0.1;
 
     //adelante positivo
     //isquierda positivo
-    public static final double rrDistanceX = -0.315;
+    public static final double rrDistanceX = 0.315;
     public static final double rrDistanceY = -0.255;
     public static final double rlDistanceX = 0.285;
-    public static final double rlDistanceY = -0.255;
-    public static final double flDistanceX = 0.285;
+    public static final double rlDistanceY = 0.255;
+    public static final double flDistanceX = -0.285;
     public static final double flDistanceY = 0.325;
     public static final double frDistanceX = -0.315;
-    public static final double frDistanceY = 0.325;
+    public static final double frDistanceY = -0.325;
 
-    //                                            perímetro  in2m   reducción: 8.14:1   ticks a revs
-    public static final double driveTicks2Meters = 4 * pi / (39.37 * 8.14         *       2048     );
+    //                                            perímetro  in2m   reducción: 8.14:1
+    public static final double driveRevs2Meters = 4 * pi / (39.37 * 8.14);
     //                                                     100ms a segundos
-    public static final double driveTPD2MPS = driveTicks2Meters /10;
+    public static final double driveRPS2MPS = driveRevs2Meters;
 
     public static final double moduleTurnkP = 0.23; 
 

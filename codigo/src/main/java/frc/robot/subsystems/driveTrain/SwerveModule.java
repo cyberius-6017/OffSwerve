@@ -6,11 +6,13 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import com.ctre.phoenix.sensors.CANCoder;
+//import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix6.hardware.TalonFX;
+//import com.ctre.phoenix.motorcontrol.ControlMode;
+//import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import frc.robot.Constants;
 
@@ -20,22 +22,21 @@ public class SwerveModule extends SubsystemBase{
     private TalonFX driveMotor;
     private CANSparkMax turnMotor; 
     private Translation2d translation;
-    private CANCoder turnEncoder;
+    private CANcoder turnEncoder;
     private double encoderOffset;
     private static boolean invEncoder;
 
     private static int reverse = 1;
 
-    public SwerveModule(int turnId, int driveId, int encoderId, double xDistance, double yDistance, double encoderOffset , boolean invertEncoder){
+    public SwerveModule(int turnId, int driveId, int encoderId, double xDistance, double yDistance, double encoderOffset , boolean invertDriveMotor){
         this.turnMotor = new CANSparkMax(turnId, MotorType.kBrushless);
         this.driveMotor = new TalonFX(driveId);
         this.translation = new Translation2d(xDistance, yDistance);
-        this.turnEncoder = new CANCoder(encoderId);
+        this.turnEncoder = new CANcoder(encoderId);
         //this.turnEncoder.setPositionConversionFactor(360.0 / 4096.0);
         this.encoderOffset = encoderOffset;
-        invEncoder = invertEncoder;
 
-        driveMotor.setInverted(false);
+        driveMotor.setInverted(invertDriveMotor);
         turnMotor.setInverted(false);
 
         resetDriveEncoder();
@@ -55,15 +56,15 @@ public class SwerveModule extends SubsystemBase{
     }
 
     public void resetDriveEncoder(){
-        driveMotor.setSelectedSensorPosition(0);
+       //driveMotor.setRotorPosition(0);
     }
 
     public double getDrivePosition(){
-        return driveMotor.getSelectedSensorPosition() * Constants.driveTicks2Meters;
+        return driveMotor.getPosition().getValue() * Constants.driveRevs2Meters;
     }
 
     public double getDriveVelocity(){
-        return driveMotor.getSelectedSensorVelocity() * Constants.driveTPD2MPS;
+        return driveMotor.getVelocity().getValue() * Constants.driveRPS2MPS;
     }
     
     public SwerveModulePosition getSwervePosition(){
@@ -71,7 +72,7 @@ public class SwerveModule extends SubsystemBase{
     }
 
     public SwerveModuleState getSwerveState(){
-        return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAdjRadians()));
+       return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAdjRadians()));
     }
 
 
@@ -98,33 +99,32 @@ public class SwerveModule extends SubsystemBase{
 
         turnMotor.set(pSet(dir) * Constants.moduleTurnkP);
         if(state.speedMetersPerSecond < 0.05 && state.speedMetersPerSecond > -0.05){
-          driveMotor.set(ControlMode.PercentOutput, 0);  
+          driveMotor.set(0);  
         } else{
-          driveMotor.set(ControlMode.PercentOutput,state.speedMetersPerSecond * reverse);
+          driveMotor.set(state.speedMetersPerSecond * reverse);
         }
     }
 
     public void stop(){
-        driveMotor.set(ControlMode.PercentOutput, 0);
+        driveMotor.set(0);
         turnMotor.set(0);
     }
 
     public double getAdjRadians(){
-        double angle = turnEncoder.getAbsolutePosition() - encoderOffset;
+        double angle = (turnEncoder.getAbsolutePosition().getValue()*2 * Constants.pi) - encoderOffset;
     
-        if (angle > 360){
-          angle -= 360;
+        if (angle > 2 * Constants.pi){
+          angle -= 2* Constants.pi;
         }
     
         if (angle < 0){
-          angle += 360;
+          angle += 2 * Constants.pi;
         }
         
         if (invEncoder){
-          angle = 360 - angle;
+          angle = 2* Constants.pi - angle;
         }
 
-        angle = Math.toRadians(angle);
         
 
         return angle;
