@@ -15,16 +15,17 @@ public class DriveCommandModified extends CommandBase {
 
   private final DriveTrainSubsystemModified driveTrain;
   private final Supplier<Double> xFunction, yFunction, turnFunction;
-  private final Supplier<Boolean>  backButton;
+  private final Supplier<Boolean>  backButton, resetButton;
   private  boolean pressed = false;
   
 
-   public DriveCommandModified(DriveTrainSubsystemModified driveTrain,  Supplier<Double> xFunction, Supplier<Double> yFunction, Supplier<Double> turnFunction, Supplier<Boolean> backButton)  {
+   public DriveCommandModified(DriveTrainSubsystemModified driveTrain,  Supplier<Double> xFunction, Supplier<Double> yFunction, Supplier<Double> turnFunction, Supplier<Boolean> backButton, Supplier<Boolean> resetButton)  {
     this.driveTrain = driveTrain;
     this.xFunction = xFunction;
     this.yFunction = yFunction;
     this.turnFunction = turnFunction;
     this.backButton = backButton;
+    this.resetButton = resetButton;
 
     addRequirements(driveTrain);
    }
@@ -56,13 +57,18 @@ public class DriveCommandModified extends CommandBase {
      } else {
        pressed = false;
      }
-   } 
+   }   
 
    if (pressed == true){
     driveTrain.setNormalSpeeds(realXValue, realYValue, realTurnValue, 0.4);
    } else {
     driveTrain.setFieldOrientedSpeeds(realXValue, realYValue, realTurnValue);
    }
+
+   if(resetButton.get()){
+    driveTrain.resetOdometry();
+   }
+
   }
 
 

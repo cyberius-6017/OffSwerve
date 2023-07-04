@@ -27,7 +27,7 @@ public class RobotContainer {
   public RobotContainer() {
     
     m_DriveTrainSubsystemModified.setDefaultCommand(new DriveCommandModified(m_DriveTrainSubsystemModified, () -> driveController.getLeftX(),
-    () -> driveController.getLeftY(), () -> driveController.getRightX(), () -> driveController.getBackButtonPressed()));
+    () -> driveController.getLeftY(), () -> driveController.getRightX(), () -> driveController.getBackButtonPressed(), () -> driveController.getAButtonPressed()));
    
    
 

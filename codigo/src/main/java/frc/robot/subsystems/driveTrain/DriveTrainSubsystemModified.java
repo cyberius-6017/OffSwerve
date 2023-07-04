@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -45,6 +46,8 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
 
   private SwerveDriveOdometry odometry;
 
+  private SwerveDrivePoseEstimator poseEstimator;
+
 
   public DriveTrainSubsystemModified() {
 
@@ -54,6 +57,7 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
       navx.reset();
       
       odometry = new SwerveDriveOdometry(kinematics, getRotation2d(), positions);
+      poseEstimator = new SwerveDrivePoseEstimator(kinematics, getRotation2d(), positions, new Pose2d(0, 0, getRotation2d()));
 
    
   }
@@ -238,6 +242,7 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
     positions[2] = rlModule.getSwervePosition();
     positions[3] = rrModule.getSwervePosition(); 
     odometry.update(getRotation2d(), positions);
+    poseEstimator.update(getRotation2d(), positions);
 
     SmartDashboard.putNumber("fl angle", flModule.getAdjRadians());
     SmartDashboard.putNumber("fr angle", frModule.getAdjRadians());
@@ -253,7 +258,8 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
   }
 
   public void resetOdometry(){
-     odometry.resetPosition(getRotation2d(), positions, getPose2d());
+     odometry.resetPosition(getRotation2d(), positions, new Pose2d(0, 0, getRotation2d()));
+     poseEstimator.resetPosition(getRotation2d(), positions, new Pose2d(0,0, getRotation2d()));
   }
 
   public void resetDriveEncodersPosition(){
