@@ -25,7 +25,7 @@ import frc.robot.Constants;
 public class DriveTrainSubsystemModified extends SubsystemBase {
 
   private SwerveModule flModule = new SwerveModule(Constants.flTurnId, Constants.flDriveId, 
-  Constants.flEncoderId, Constants.flDistanceX, Constants.flDistanceY, Constants.flOffset, false);
+  Constants.flEncoderId, Constants.flDistanceX, Constants.flDistanceY, Constants.flOffset, true);
  
   private SwerveModule frModule = new SwerveModule(Constants.frTurnId, Constants.frDriveId, 
   Constants.frEncoderId, Constants.frDistanceX, Constants.frDistanceY, Constants.frOffset, false);
@@ -128,7 +128,6 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
   public void setLimitedChassisSpeeds(ChassisSpeeds speeds, double maxSpeed){
     SwerveModuleState[] states = kinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(states, maxSpeed); 
-    states[0].speedMetersPerSecond = -states[0].speedMetersPerSecond; //voltear drive motor de fl porque así es
 
    
     flModule.setSwerveState(states[0]);
@@ -262,12 +261,6 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
      poseEstimator.resetPosition(getRotation2d(), positions, new Pose2d(0,0, getRotation2d()));
   }
 
-  public void resetDriveEncodersPosition(){
-    flModule.resetDriveEncoder();
-    frModule.resetDriveEncoder();
-    rlModule.resetDriveEncoder();
-    rrModule.resetDriveEncoder();
-  }
 
   
 
