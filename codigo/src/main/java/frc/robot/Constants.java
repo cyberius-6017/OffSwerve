@@ -56,6 +56,7 @@ public final class Constants {
     public static final double driveRevs2Meters = 4 * pi / (39.37 * 8.14);
     //                                                     100ms a segundos
     public static final double driveRPS2MPS = driveRevs2Meters;
+    public static final double falconMaxFrequency = 100;
 
     public static final double moduleTurnkP = 0.23; 
 

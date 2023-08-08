@@ -9,23 +9,22 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import java.util.function.Supplier;
 import frc.robot.subsystems.driveTrain.DriveTrainSubsystemModified;
 
-/** An example command that uses an example subsystem. */
+
 public class DriveCommandModified extends CommandBase {
 
 
   private final DriveTrainSubsystemModified driveTrain;
   private final Supplier<Double> xFunction, yFunction, turnFunction;
-  private final Supplier<Boolean>  backButton, resetButton;
+  private final Supplier<Boolean>  toggleNormal;
   private  boolean pressed = false;
   
 
-   public DriveCommandModified(DriveTrainSubsystemModified driveTrain,  Supplier<Double> xFunction, Supplier<Double> yFunction, Supplier<Double> turnFunction, Supplier<Boolean> backButton, Supplier<Boolean> resetButton)  {
+   public DriveCommandModified(DriveTrainSubsystemModified driveTrain,  Supplier<Double> xFunction, Supplier<Double> yFunction, Supplier<Double> turnFunction, Supplier<Boolean> toggleNormal)  {
     this.driveTrain = driveTrain;
     this.xFunction = xFunction;
     this.yFunction = yFunction;
     this.turnFunction = turnFunction;
-    this.backButton = backButton;
-    this.resetButton = resetButton;
+    this.toggleNormal = toggleNormal;
 
     addRequirements(driveTrain);
    }
@@ -34,8 +33,6 @@ public class DriveCommandModified extends CommandBase {
   @Override
   public void initialize() {
 
-    driveTrain.resetDriveEncodersPosition();
-    driveTrain.resetNavx();
 
     System.out.println("Modified drive command started");
   }
@@ -51,7 +48,7 @@ public class DriveCommandModified extends CommandBase {
     
     driveTrain.setFieldOrientedSpeeds(realXValue, realYValue, realTurnValue);
 
-   if (backButton.get()) { 
+   if (toggleNormal.get()) { 
      if (pressed == false ){
       pressed = true;
      } else {
@@ -65,9 +62,6 @@ public class DriveCommandModified extends CommandBase {
     driveTrain.setFieldOrientedSpeeds(realXValue, realYValue, realTurnValue);
    }
 
-   if(resetButton.get()){
-    driveTrain.resetOdometry();
-   }
 
   }
 

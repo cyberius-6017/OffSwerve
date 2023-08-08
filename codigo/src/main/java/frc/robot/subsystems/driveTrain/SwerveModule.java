@@ -6,17 +6,16 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-//import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix6.controls.StaticBrake;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.ctre.phoenix6.hardware.TalonFX;
-//import com.ctre.phoenix.motorcontrol.ControlMode;
-//import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import frc.robot.Constants;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class SwerveModule extends SubsystemBase{
     private TalonFX driveMotor;
@@ -25,6 +24,7 @@ public class SwerveModule extends SubsystemBase{
     private CANcoder turnEncoder;
     private double encoderOffset;
     private static boolean invEncoder;
+    private StaticBrake brake = new StaticBrake();
 
     private static int reverse = 1;
 
@@ -33,13 +33,15 @@ public class SwerveModule extends SubsystemBase{
         this.driveMotor = new TalonFX(driveId);
         this.translation = new Translation2d(xDistance, yDistance);
         this.turnEncoder = new CANcoder(encoderId);
-        //this.turnEncoder.setPositionConversionFactor(360.0 / 4096.0);
         this.encoderOffset = encoderOffset;
 
         driveMotor.setInverted(invertDriveMotor);
         turnMotor.setInverted(false);
+    
+        turnMotor.setSmartCurrentLimit(30);
+        turnMotor.setIdleMode(IdleMode.kBrake);
 
-        resetDriveEncoder();
+
     }
 
   
@@ -55,9 +57,6 @@ public class SwerveModule extends SubsystemBase{
         return translation;
     }
 
-    public void resetDriveEncoder(){
-       //driveMotor.setRotorPosition(0);
-    }
 
     public double getDrivePosition(){
         return driveMotor.getPosition().getValue() * Constants.driveRevs2Meters;
@@ -83,6 +82,7 @@ public class SwerveModule extends SubsystemBase{
        
         double dir = state.angle.getRadians(); // + 3 * Constants.pi / 2;
 
+        //voltear
         dir = 2 * Constants.pi - dir;
 
         //arreglar
@@ -91,27 +91,26 @@ public class SwerveModule extends SubsystemBase{
         } else if (dir < 0){
           dir = dir + 2 * Constants.pi;
         }
-        //voltear
-       // dir = 2 * Constants.pi - dir;
 
-        SmartDashboard.putNumber("angle" ,dir);
-        SmartDashboard.putNumber("Speed" , state.speedMetersPerSecond);
 
         turnMotor.set(pSet(dir) * Constants.moduleTurnkP);
         if(state.speedMetersPerSecond < 0.05 && state.speedMetersPerSecond > -0.05){
-          driveMotor.set(0);  
+          driveMotor.setControl(brake);
         } else{
           driveMotor.set(state.speedMetersPerSecond * reverse);
+
+          //TODO: hacer el PID para que la velocidad de los modulos quede igual (tunear en tuner x y usar ese slot aquí -------------------------------------vv)
+          driveMotor.setControl(new VelocityDutyCycle(state.speedMetersPerSecond * reverse * Constants.falconMaxFrequency, false, 0, 0, true));
         }
     }
 
     public void stop(){
-        driveMotor.set(0);
-        turnMotor.set(0);
+        driveMotor.setControl(brake);
+        turnMotor.stopMotor();
     }
 
     public double getAdjRadians(){
-        double angle = (turnEncoder.getAbsolutePosition().getValue()*2 * Constants.pi) - encoderOffset;
+        double angle = (turnEncoder.getAbsolutePosition().getValue() * 2 * Constants.pi) - encoderOffset;
     
         if (angle > 2 * Constants.pi){
           angle -= 2* Constants.pi;
@@ -122,10 +121,8 @@ public class SwerveModule extends SubsystemBase{
         }
         
         if (invEncoder){
-          angle = 2* Constants.pi - angle;
+          angle = 2 * Constants.pi - angle;
         }
-
-        
 
         return angle;
     }
@@ -177,7 +174,7 @@ public class SwerveModule extends SubsystemBase{
         p = eError;
         if (p * Constants.moduleTurnkP > 1){
           p = 1 / Constants.moduleTurnkP;
-          System.out.println("!!!!!!!!!!!!omggggggg!!!!!!!!!!!!!!!!!!!!!!!!! p > 1");
+          System.out.println("!!!!!!!!!!!! |- o -| !!!!!!!!!!!!!!!!!!!!!!!!! p > 1");
         }
         return p;
       }
