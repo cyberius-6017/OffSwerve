@@ -15,16 +15,17 @@ public class DriveCommandModified extends CommandBase {
 
   private final DriveTrainSubsystemModified driveTrain;
   private final Supplier<Double> xFunction, yFunction, turnFunction;
-  private final Supplier<Boolean>  toggleNormal;
+  private final Supplier<Boolean>  toggleNormal, resetNavx;
   private  boolean pressed = false;
   
 
-   public DriveCommandModified(DriveTrainSubsystemModified driveTrain,  Supplier<Double> xFunction, Supplier<Double> yFunction, Supplier<Double> turnFunction, Supplier<Boolean> toggleNormal)  {
+   public DriveCommandModified(DriveTrainSubsystemModified driveTrain,  Supplier<Double> xFunction, Supplier<Double> yFunction, Supplier<Double> turnFunction, Supplier<Boolean> toggleNormal, Supplier<Boolean> resetNavx)  {
     this.driveTrain = driveTrain;
     this.xFunction = xFunction;
     this.yFunction = yFunction;
     this.turnFunction = turnFunction;
     this.toggleNormal = toggleNormal;
+    this.resetNavx = resetNavx;
 
     addRequirements(driveTrain);
    }
@@ -55,6 +56,10 @@ public class DriveCommandModified extends CommandBase {
        pressed = false;
      }
    }   
+
+  if(resetNavx.get()){
+    driveTrain.resetNavx();
+  }
 
    if (pressed == true){
     driveTrain.setNormalSpeeds(realXValue, realYValue, realTurnValue, 0.4);

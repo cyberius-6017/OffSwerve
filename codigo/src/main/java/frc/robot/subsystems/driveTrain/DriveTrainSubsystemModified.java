@@ -25,7 +25,7 @@ import frc.robot.Constants;
 public class DriveTrainSubsystemModified extends SubsystemBase {
 
   private SwerveModule flModule = new SwerveModule(Constants.flTurnId, Constants.flDriveId, 
-  Constants.flEncoderId, Constants.flDistanceX, Constants.flDistanceY, Constants.flOffset, true);
+  Constants.flEncoderId, Constants.flDistanceX, Constants.flDistanceY, Constants.flOffset, false);
  
   private SwerveModule frModule = new SwerveModule(Constants.frTurnId, Constants.frDriveId, 
   Constants.frEncoderId, Constants.frDistanceX, Constants.frDistanceY, Constants.frOffset, false);

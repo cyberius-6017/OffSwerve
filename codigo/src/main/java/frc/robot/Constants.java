@@ -38,7 +38,7 @@ public final class Constants {
     public static final double frOffset = 3.20;
     public static final double rlOffset = 5.98;
     
-    public static final double maxDriveSignal = 0.3;
+    public static final double maxDriveSignal = 0.6;
     public static final double driftMinimum = 0.1;
 
     //adelante positivo

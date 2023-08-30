@@ -100,7 +100,7 @@ public class SwerveModule extends SubsystemBase{
           driveMotor.set(state.speedMetersPerSecond * reverse);
 
           //TODO: hacer el PID para que la velocidad de los modulos quede igual (tunear en tuner x y usar ese slot aquí -------------------------------------vv)
-          driveMotor.setControl(new VelocityDutyCycle(state.speedMetersPerSecond * reverse * Constants.falconMaxFrequency, false, 0, 0, true));
+          //driveMotor.setControl(new VelocityDutyCycle(state.speedMetersPerSecond * reverse * Constants.falconMaxFrequency, false, 0, 0, true));
         }
     }
 
