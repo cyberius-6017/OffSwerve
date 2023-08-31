@@ -8,7 +8,7 @@ import com.revrobotics.CANSparkMax.ControlType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class hombro extends SubsystemBase{
+public class Hombro extends SubsystemBase{
 
     private CANSparkMax star1;
     private CANSparkMax star2; 
@@ -17,7 +17,7 @@ public class hombro extends SubsystemBase{
     private SparkMaxAbsoluteEncoder encoder;
     private SparkMaxPIDController pid;
 
-    public hombro(int idStar1, int idStar2, int idRats1, int idRats2){
+    public Hombro(int idStar1, int idStar2, int idRats1, int idRats2){
         this.star1 = new CANSparkMax(idStar1, MotorType.kBrushless);
         this.star2 = new CANSparkMax(idStar2, MotorType.kBrushless);
         this.rats1 = new CANSparkMax(idRats1, MotorType.kBrushless);

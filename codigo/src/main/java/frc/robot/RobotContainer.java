@@ -6,6 +6,7 @@ package frc.robot;
 import frc.robot.commands.DriveCommandModified;
 
 import frc.robot.subsystems.driveTrain.DriveTrainSubsystemModified;
+import frc.robot.subsystems.Hombro;
 
 
 import edu.wpi.first.wpilibj.XboxController;
@@ -15,6 +16,8 @@ public class RobotContainer {
   private final DriveTrainSubsystemModified m_DriveTrainSubsystemModified = new DriveTrainSubsystemModified();
  
   private final XboxController driveController = new XboxController(Constants.driveControllerID);
+
+  private final Hombro hombro = new Hombro(Constants.hombroId1, Constants.hombroId2, Constants.hombroId3, Constants.hombroId4);
  
   public RobotContainer() {
     
