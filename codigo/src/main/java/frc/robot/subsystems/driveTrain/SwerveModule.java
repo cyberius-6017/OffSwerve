@@ -3,6 +3,7 @@ package frc.robot.subsystems.driveTrain;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -34,6 +35,8 @@ public class SwerveModule extends SubsystemBase{
         this.translation = new Translation2d(xDistance, yDistance);
         this.turnEncoder = new CANcoder(encoderId);
         this.encoderOffset = encoderOffset;
+
+        turnMotor.restoreFactoryDefaults();
 
         driveMotor.setInverted(invertDriveMotor);
         turnMotor.setInverted(false);
@@ -175,7 +178,9 @@ public class SwerveModule extends SubsystemBase{
         if (p * Constants.moduleTurnkP > 1){
           p = 1 / Constants.moduleTurnkP;
           System.out.println("!!!!!!!!!!!! |- o -| !!!!!!!!!!!!!!!!!!!!!!!!! p > 1");
-        }
+          
+        } 
+        SmartDashboard.putNumber("Error xd: " , p);
         return p;
       }
 }

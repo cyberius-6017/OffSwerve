@@ -33,24 +33,30 @@ public final class Constants {
     public static final int rlTurnId = 52; 
 
     //offset está en radianes
-    public static final double rrOffset = 1.78;
-    public static final double flOffset = 2.61;
-    public static final double frOffset = 3.20;
-    public static final double rlOffset = 5.98;
+    public static final double rrOffset = 1.67 + pi;//1.54;
+    public static final double flOffset = 1.3 ;//2.61 - pi/2 ;
+    public static final double frOffset = 0.29;//3.20 + pi;
+    public static final double rlOffset = 1.05+ pi;//1.23;
     
     public static final double maxDriveSignal = 0.6;
     public static final double driftMinimum = 0.1;
 
+    /////////////MECANISMOS////////////////////////
+    //TODO: Revisar ID's
+
+    public static final int armPower1Id = 10;
+    public static final int armPower2Id = 20;
+
     //adelante positivo
-    //isquierda positivo
-    public static final double rrDistanceX = 0.315;
-    public static final double rrDistanceY = -0.255;
-    public static final double rlDistanceX = 0.285;
-    public static final double rlDistanceY = 0.255;
-    public static final double flDistanceX = -0.285;
-    public static final double flDistanceY = 0.325;
-    public static final double frDistanceX = -0.315;
-    public static final double frDistanceY = -0.325;
+    //izquierda positivo
+    public static final double rrDistanceX = 0.593;
+    public static final double rrDistanceY = -0.593;
+    public static final double rlDistanceX = 0.593;
+    public static final double rlDistanceY = 0.593;
+    public static final double flDistanceX = -0.593;
+    public static final double flDistanceY = 0.593;
+    public static final double frDistanceX = -0.593;
+    public static final double frDistanceY = -0.593;
 
     //                                            perímetro  in2m   reducción: 8.14:1
     public static final double driveRevs2Meters = 4 * pi / (39.37 * 8.14);
