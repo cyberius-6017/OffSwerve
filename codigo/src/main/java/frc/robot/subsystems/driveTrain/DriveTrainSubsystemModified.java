@@ -26,12 +26,13 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
 
   private SwerveModule flModule = new SwerveModule(Constants.flTurnId, Constants.flDriveId, 
   Constants.flEncoderId, Constants.flDistanceX, Constants.flDistanceY, Constants.flOffset, false);
+  
  
   private SwerveModule frModule = new SwerveModule(Constants.frTurnId, Constants.frDriveId, 
   Constants.frEncoderId, Constants.frDistanceX, Constants.frDistanceY, Constants.frOffset, false);
  
   private SwerveModule rlModule = new SwerveModule(Constants.rlTurnId, Constants.rlDriveId, 
-  Constants.rlEncoderId, Constants.rlDistanceX, Constants.rlDistanceY, Constants.rlOffset, true);
+  Constants.rlEncoderId, Constants.rlDistanceX, Constants.rlDistanceY, Constants.rlOffset, false);
 
   private SwerveModule rrModule = new SwerveModule(Constants.rrTurnId, Constants.rrDriveId, 
   Constants.rrEncoderId, Constants.rrDistanceX, Constants.rrDistanceY, Constants.rrOffset, false);
@@ -72,14 +73,10 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
 
   public double getNavxYawRadians(){
     double angle = navx.getYaw();
-    angle -= 180;
-    angle *= -1;
+    angle += 180;
+    //angle *= -1;
     angle *= Constants.pi / 180;
-
-    angle-= (Constants.pi/2);
-
-    
-
+    angle -=  Constants.pi/2;
     if (angle > 2 * Constants.pi){
       angle -= 2* Constants.pi;
     }
@@ -119,6 +116,11 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
     frModule.setSwerveState(states[1]);
     rlModule.setSwerveState(states[2]);
     rrModule.setSwerveState(states[3]);
+
+    SmartDashboard.putNumber("fl req", states[0].angle.getRadians());
+    SmartDashboard.putNumber("fr req", states[1].angle.getRadians());
+    SmartDashboard.putNumber("rl req", states[2].angle.getRadians());
+    SmartDashboard.putNumber("rr req", states[3].angle.getRadians());
   }
 
   public void setChassisSpeeds(ChassisSpeeds speeds){
@@ -247,6 +249,8 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
     SmartDashboard.putNumber("fr angle", frModule.getAdjRadians());
     SmartDashboard.putNumber("rl angle", rlModule.getAdjRadians());
     SmartDashboard.putNumber("rr angle", rrModule.getAdjRadians());
+
+    
 
     
     SmartDashboard.putString("Pose", getPose2d().getTranslation().toString());
