@@ -14,6 +14,7 @@ package frc.robot;
  */
 public final class Constants {
   public static final int driveControllerID = 0;
+  public static final int mechanismControllerId = 1;
   public static final double pi = Math.PI;
 
     
@@ -32,20 +33,25 @@ public final class Constants {
     public static final int rrTurnId = 42;
     public static final int rlTurnId = 52; 
 
+    
+
     //offset está en radianes
     public static final double rrOffset = 1.67 + pi;//1.54;
     public static final double flOffset = 1.3 ;//2.61 - pi/2 ;
     public static final double frOffset = 0.29;//3.20 + pi;
     public static final double rlOffset = 1.05+ pi;//1.23;
     
-    public static final double maxDriveSignal = 0.6;
+    public static final double maxDriveSignal = 0.85;
     public static final double driftMinimum = 0.1;
 
     /////////////MECANISMOS////////////////////////
     //TODO: Revisar ID's
 
-    public static final int armPower1Id = 10;
-    public static final int armPower2Id = 20;
+    // 1 y 2 van juntos, 3 y 4 van juntos
+    public static final int hombroId1 = 10;
+    public static final int hombroId2 = 11;
+    public static final int hombroId3 = 12;
+    public static final int hombroId4 = 13;
 
     //adelante positivo
     //izquierda positivo
@@ -62,7 +68,14 @@ public final class Constants {
     public static final double driveRevs2Meters = 4 * pi / (39.37 * 8.14);
     //                                                     100ms a segundos
     public static final double driveRPS2MPS = driveRevs2Meters;
-    public static final double falconMaxFrequency = 100;
+    public static final double falconMaxFrequency = 100; // por cambiar
+
+    public static final double elevadorRevs2Meters = (11/50) * (18*0.005) * 2; //checar valores
+                                    //polea chica a grande * polea a movimiento de banda * 2 etapas
+
+    public static final double wristRevs2Rev = (9/50) * (15/40) * (15/40);
+
+
 
     public static final double moduleTurnkP = 0.23; 
 
