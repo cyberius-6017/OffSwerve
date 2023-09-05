@@ -32,10 +32,7 @@ public final class Constants {
     public static final int rrTurnId = 42;
     public static final int rlTurnId = 52; 
 
-    public static final int hombroId1 = 10;
-    public static final int hombroId2 = 11;
-    public static final int hombroId3 = 12;
-    public static final int hombroId4 = 13;
+    
 
     //offset está en radianes
     public static final double rrOffset = 1.67 + pi;//1.54;
@@ -49,8 +46,11 @@ public final class Constants {
     /////////////MECANISMOS////////////////////////
     //TODO: Revisar ID's
 
-    public static final int armPower1Id = 10;
-    public static final int armPower2Id = 20;
+    // 1 y 2 van juntos, 3 y 4 van juntos
+    public static final int hombroId1 = 10;
+    public static final int hombroId2 = 11;
+    public static final int hombroId3 = 12;
+    public static final int hombroId4 = 13;
 
     //adelante positivo
     //izquierda positivo

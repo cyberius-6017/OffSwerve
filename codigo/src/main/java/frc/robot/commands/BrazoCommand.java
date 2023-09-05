@@ -8,4 +8,8 @@ public class HombroCommand extends CommandBase{
 
     private Hombro hombro;
     
+    public HombroCommand(Hombro hombro){
+        this.hombro = hombro;
+    }
+
 }

@@ -5,6 +5,7 @@ import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -22,6 +23,21 @@ public class Hombro extends SubsystemBase{
         this.star2 = new CANSparkMax(idStar2, MotorType.kBrushless);
         this.rats1 = new CANSparkMax(idRats1, MotorType.kBrushless);
         this.rats2 = new CANSparkMax(idRats2, MotorType.kBrushless);
+
+        star1.restoreFactoryDefaults();
+        star2.restoreFactoryDefaults();
+        rats1.restoreFactoryDefaults();
+        rats2.restoreFactoryDefaults();
+
+        star1.setSmartCurrentLimit(30);
+        star2.setSmartCurrentLimit(30);
+        rats1.setSmartCurrentLimit(30);
+        rats2.setSmartCurrentLimit(30);
+
+        star1.setIdleMode(IdleMode.kBrake);
+        star2.setIdleMode(IdleMode.kBrake);
+        rats1.setIdleMode(IdleMode.kBrake);
+        rats2.setIdleMode(IdleMode.kBrake);
 
         star2.follow(star1, false);
         rats1.follow(star1, true);
