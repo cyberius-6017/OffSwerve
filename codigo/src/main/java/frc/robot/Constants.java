@@ -14,6 +14,7 @@ package frc.robot;
  */
 public final class Constants {
   public static final int driveControllerID = 0;
+  public static final int mechanismControllerId = 1;
   public static final double pi = Math.PI;
 
     
@@ -40,7 +41,7 @@ public final class Constants {
     public static final double frOffset = 0.29;//3.20 + pi;
     public static final double rlOffset = 1.05+ pi;//1.23;
     
-    public static final double maxDriveSignal = 0.6;
+    public static final double maxDriveSignal = 0.85;
     public static final double driftMinimum = 0.1;
 
     /////////////MECANISMOS////////////////////////
