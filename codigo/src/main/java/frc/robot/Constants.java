@@ -53,6 +53,9 @@ public final class Constants {
     public static final int hombroId3 = 12;
     public static final int hombroId4 = 13;
 
+    public static final int wristId = 60;
+    public static final int rollerId = 17;
+
     //adelante positivo
     //izquierda positivo
     public static final double rrDistanceX = 0.593;
