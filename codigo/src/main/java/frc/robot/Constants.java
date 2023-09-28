@@ -73,6 +73,8 @@ public final class Constants {
     public static final double driveRPS2MPS = driveRevs2Meters;
     public static final double falconMaxFrequency = 100; // por cambiar
 
+    public static final double balancekP = 1/180 * 5;
+
     public static final double elevadorRevs2Meters = (11/50) * (18*0.005) * 2; //checar valores
                                     //polea chica a grande * polea a movimiento de banda * 2 etapas
 
@@ -81,6 +83,11 @@ public final class Constants {
 
 
     public static final double moduleTurnkP = 0.23; 
+
+
+    public static final double encoderOffsetHombro =  0.2;
+    public static final double hombrokP = 0.25;
+    public static final double hombrokI = 0;
 
   public static class OperatorConstants {
     

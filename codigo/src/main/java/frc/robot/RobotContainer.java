@@ -31,7 +31,7 @@ public class RobotContainer {
     m_DriveTrainSubsystemModified.setDefaultCommand(new DriveCommandModified(m_DriveTrainSubsystemModified, () -> driveController.getLeftX(),
     () -> driveController.getLeftY(), () -> driveController.getRightX(), () -> driveController.getRightBumperPressed(), () -> driveController.getBButtonPressed()));
    
-    m_hombro.setDefaultCommand(new BrazoCommand(m_hombro, m_garra, ()-> mechanismController.getLeftY(), ()-> mechanismController.getRightY(), ()-> mechanismController.getLeftTriggerAxis(), () -> mechanismController.getRightTriggerAxis()));
+    m_hombro.setDefaultCommand(new BrazoCommand(m_hombro, m_garra, ()-> mechanismController.getLeftY(), ()-> mechanismController.getRightY(), ()-> mechanismController.getLeftTriggerAxis(), () -> mechanismController.getRightTriggerAxis(), () -> mechanismController.getAButtonPressed(), () -> mechanismController.getBButtonPressed(), () -> mechanismController.getXButtonPressed(), () -> mechanismController.getYButtonPressed()));
 
     configureBindings();
   }

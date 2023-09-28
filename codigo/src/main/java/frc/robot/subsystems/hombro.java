@@ -7,7 +7,9 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Hombro extends SubsystemBase{
 
@@ -16,7 +18,10 @@ public class Hombro extends SubsystemBase{
     private CANSparkMax rats1; 
     private CANSparkMax rats2; 
     private SparkMaxAbsoluteEncoder encoder;
+    
     private SparkMaxPIDController pid;
+    private static double previousPosition;
+    private static double relativePosition;
 
     public Hombro(int idStar1, int idStar2, int idRats1, int idRats2){
         this.star1 = new CANSparkMax(idStar1, MotorType.kBrushless);
@@ -39,23 +44,57 @@ public class Hombro extends SubsystemBase{
         rats1.setIdleMode(IdleMode.kBrake);
         rats2.setIdleMode(IdleMode.kBrake);
 
+        star1.setInverted(true);
+
         star2.follow(star1, false);
         rats1.follow(star1, true);
         rats2.follow(star1, true);
 
         encoder = star1.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
+        encoder.setZeroOffset(Constants.encoderOffsetHombro);
 
         pid = star1.getPIDController();
         
         pid.setFeedbackDevice(encoder);
+        
+
+        pid.setP(Constants.hombrokP);
+        pid.setI(Constants.hombrokI);
+        pid.setD(0);
+        pid.setFF(0);
+        pid.setOutputRange(-0.3, 0.3);
+
+        previousPosition = getAbsolutePosition();
+
+        relativePosition = getAbsolutePosition();
     }
 
-    public double getPostion(){
+    public void periodic(){
+        SmartDashboard.putNumber("relative Position", getRelativePosition());
+
+        if(previousPosition - getAbsolutePosition() < -1.5){
+            relativePosition = -2 + getAbsolutePosition();
+        }else if(previousPosition - getAbsolutePosition() < -0.5){
+            relativePosition = -1 + getAbsolutePosition();
+        } else if (previousPosition - getAbsolutePosition() > 0.5){
+            relativePosition = 1 + getAbsolutePosition();
+        } else{
+           relativePosition = getAbsolutePosition();
+        }
+
+        previousPosition = relativePosition;
+    }
+
+    public double getAbsolutePosition(){
         return encoder.getPosition();
     }
 
-    public void set(double speed){
-        star1.set(speed);
+    public double getRelativePosition(){
+        return relativePosition;
+    }
+
+    public void set(double speed){ 
+        star1.set(-speed);
     }
 
     public void setPosition(double position){

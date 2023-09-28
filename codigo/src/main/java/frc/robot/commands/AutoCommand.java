@@ -7,6 +7,7 @@ import frc.robot.subsystems.Hombro;
 
 import java.io.Serial;
 import java.util.function.Supplier;
+import frc.robot.Constants;
 
 
 public class AutoCommand extends CommandBase{
@@ -25,29 +26,37 @@ public class AutoCommand extends CommandBase{
     public void initialize() {
   
   
-      System.out.println("Autos moda y rock and roll command started");
+      System.out.println("Autos moda y rock&roll command started");
     }
-
+    static double degrees;
+    static boolean arrived = false;;
     @Override
     public void execute(){
-        if(driveTrain.getPose2d().getX() >= -1){
-            System.out.print("---------------------------0000000000000");
-            driveTrain.setChassisSpeeds(new ChassisSpeeds(-0.2, 0, 0));
+      degrees = driveTrain.getNavxRollDegrees();
+
+        if(driveTrain.getPose2d().getX() >= -1.2 && !arrived){
+            System.out.print("---------------------------00000000000000000");
+            driveTrain.setChassisSpeeds(new ChassisSpeeds(-0.45, 0, 0));
+            
         }else{
-          driveTrain.stopModules();
+          arrived= true;
+          driveTrain.setChassisSpeeds(new ChassisSpeeds(degrees *  -1 * Constants.balancekP, 0.0,0.0));
         }
     }
     
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("Autos moda y rock command ended");
+    System.out.println("Autos moda y rock&roll  command ended");
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-
+  /** 
+    if(Math.abs(degrees) < 5 && arrived){
+      return true;
+    }*/
     return false;
   }
 
