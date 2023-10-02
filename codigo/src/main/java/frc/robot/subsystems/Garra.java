@@ -9,7 +9,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 public class Garra extends SubsystemBase{
     private TalonFX wrist;
     private TalonFX roller;
-    //private PositionDutyCycle pid = new PositionDutyCycle(0, false, 0, 0, true);
+
+    
 
     public Garra(int wristId, int rollerId){
        this.wrist = new TalonFX(wristId);
@@ -27,4 +28,14 @@ public class Garra extends SubsystemBase{
     public void setRoller(double speed){
        roller.set(speed);
     }
+
+    public void setWristPosition(double position){
+
+      wrist.setControl(new PositionDutyCycle(position, false, 0.0, 0, true));
+   }
+    
+   public double getWristPosition(){ 
+      double position = wrist.getClosedLoopOutput().getValue();
+      return position;
+   }
 }
