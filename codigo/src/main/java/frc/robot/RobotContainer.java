@@ -8,7 +8,6 @@ import frc.robot.commands.DriveCommandModified;
 import frc.robot.subsystems.driveTrain.DriveTrainSubsystemModified;
 import frc.robot.subsystems.Hombro;
 import frc.robot.subsystems.Garra;
-import frc.robot.commands.AutoCommand;
 import frc.robot.commands.BrazoCommand;
 
 
@@ -24,14 +23,17 @@ public class RobotContainer {
   private final Garra m_garra = new Garra(Constants.wristId, Constants.rollerId);
 
   private final Hombro m_hombro = new Hombro(Constants.hombroId1, Constants.hombroId2, Constants.hombroId3, Constants.hombroId4);
-  
-  private final AutoCommand m_AutoCommand = new AutoCommand(m_DriveTrainSubsystemModified);
+
+  private BrazoCommand defaultBrazoCommand =new BrazoCommand(m_hombro, m_garra, ()-> mechanismController.getLeftY(), ()-> mechanismController.getRightY(), ()-> mechanismController.getLeftTriggerAxis(), () -> mechanismController.getRightTriggerAxis(), () -> mechanismController.getAButtonPressed(), () -> mechanismController.getBButtonPressed(), () -> mechanismController.getXButtonPressed(), () -> mechanismController.getYButtonPressed());
+
   public RobotContainer() {
     
     m_DriveTrainSubsystemModified.setDefaultCommand(new DriveCommandModified(m_DriveTrainSubsystemModified, () -> driveController.getLeftX(),
     () -> driveController.getLeftY(), () -> driveController.getRightX(), () -> driveController.getRightBumperPressed(), () -> driveController.getBButtonPressed()));
    
-    m_hombro.setDefaultCommand(new BrazoCommand(m_hombro, m_garra, ()-> mechanismController.getLeftY(), ()-> mechanismController.getRightY(), ()-> mechanismController.getLeftTriggerAxis(), () -> mechanismController.getRightTriggerAxis(), () -> mechanismController.getAButtonPressed(), () -> mechanismController.getBButtonPressed(), () -> mechanismController.getXButtonPressed(), () -> mechanismController.getYButtonPressed()));
+    m_hombro.setDefaultCommand(defaultBrazoCommand);
+    m_garra.setDefaultCommand(defaultBrazoCommand);
+
 
     configureBindings();
   }
@@ -48,7 +50,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
 
-   return m_AutoCommand;
+   return null;
 
 
   }

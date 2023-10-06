@@ -34,6 +34,7 @@ public class BrazoCommand extends CommandBase{
 
         reqHombroPosition = hombro.getRelativePosition();
         reqHombroPosition = 0.2;
+        reqWristPosition = 2;
     }
 
 
@@ -47,14 +48,14 @@ public class BrazoCommand extends CommandBase{
 
     @Override
     public void execute(){
-        hombro.set(hombroPoder.get()*0.15);
+        //hombro.set(hombroPoder.get()*0.15);
 
 
-        garra.setWrist(wristSpeed.get() * 0.1);
+        //garra.setWrist(wristSpeed.get() * 0.1);
 
         double rollerSpeed = rightTrigger.get()-leftTrigger.get();
 
-        garra.setRoller(rollerSpeed*0.6);
+        garra.setRoller(rollerSpeed*0.8);
 
         if(aButton.get()){
           reqHombroPosition = 0.1;
@@ -64,16 +65,16 @@ public class BrazoCommand extends CommandBase{
           reqHombroPosition = 0.25;
           reqWristPosition = 5.0;
         }
-        if(yButton.get()){
+        if(xButton.get()){
           reqHombroPosition = 0.5;
           reqWristPosition = 12.0;
         }
-        if(xButton.get()){
+        if(yButton.get()){
           reqHombroPosition = 0.75;
           reqWristPosition = 16.0;
         }
 
-        reqHombroPosition += hombroPoder.get() * 0.01;
+        //reqHombroPosition += hombroPoder.get() * 0.01;
         garra.setWristPosition(reqWristPosition);
 
         SmartDashboard.putNumber("Required hombro", reqHombroPosition);
