@@ -33,8 +33,13 @@ public class BrazoCommand extends CommandBase{
         addRequirements(garra);
 
         reqHombroPosition = hombro.getRelativePosition();
+<<<<<<< Updated upstream
         reqHombroPosition = 0.2;
         reqWristPosition = 2;
+=======
+        reqHombroPosition = 0.04;
+        reqWristPosition = 0.2;
+>>>>>>> Stashed changes
     }
 
 
@@ -48,7 +53,11 @@ public class BrazoCommand extends CommandBase{
 
     @Override
     public void execute(){
+<<<<<<< Updated upstream
         //hombro.set(hombroPoder.get()*0.15);
+=======
+       // hombro.set(hombroPoder.get()*  0.8);
+>>>>>>> Stashed changes
 
 
         //garra.setWrist(wristSpeed.get() * 0.1);
@@ -58,19 +67,28 @@ public class BrazoCommand extends CommandBase{
         garra.setRoller(rollerSpeed*0.8);
 
         if(aButton.get()){
-          reqHombroPosition = 0.1;
+          reqHombroPosition = 0.04;
           reqWristPosition = 2.0;
         }
         if(bButton.get()){
           reqHombroPosition = 0.25;
           reqWristPosition = 5.0;
         }
+<<<<<<< Updated upstream
         if(xButton.get()){
           reqHombroPosition = 0.5;
           reqWristPosition = 12.0;
         }
         if(yButton.get()){
           reqHombroPosition = 0.75;
+=======
+        if(yButton.get()){
+          reqHombroPosition = 0.45;
+          reqWristPosition = 12.0;
+        }
+        if(xButton.get()){
+          reqHombroPosition = 0.4;
+>>>>>>> Stashed changes
           reqWristPosition = 16.0;
         }
 
@@ -78,7 +96,7 @@ public class BrazoCommand extends CommandBase{
         garra.setWristPosition(reqWristPosition);
 
         SmartDashboard.putNumber("Required hombro", reqHombroPosition);
-        //hombro.setPosition(reqHombroPosition);
+        hombro.setPosition(reqHombroPosition);
     }
     
   // Called once the command ends or is interrupted.

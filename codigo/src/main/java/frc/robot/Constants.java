@@ -33,6 +33,7 @@ public final class Constants {
     public static final int rrTurnId = 42;
     public static final int rlTurnId = 52; 
 
+    public static final double EncElbOffset = -0.7375; 
     
 
     //offset está en radianes
@@ -63,7 +64,7 @@ public final class Constants {
     public static final double rlDistanceX = 0.593;
     public static final double rlDistanceY = 0.593;
     public static final double flDistanceX = -0.593;
-    public static final double flDistanceY = 0.593;
+    public static final double flDistanceY = 0.593; 
     public static final double frDistanceX = -0.593;
     public static final double frDistanceY = -0.593;
 
@@ -85,9 +86,10 @@ public final class Constants {
     public static final double moduleTurnkP = 0.23; 
 
 
-    public static final double encoderOffsetHombro =  0.2;
-    public static final double hombrokP = 0.25;
-    public static final double hombrokI = 0;
+    public static final double encoderOffsetHombro =  0.9;
+    public static final double hombrokP = 1.2;
+    public static final double hombrokI = 0.0;
+    public static final double hombrokD = 0.00002;
 
   public static class OperatorConstants {
     

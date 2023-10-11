@@ -60,9 +60,9 @@ public class Hombro extends SubsystemBase{
 
         pid.setP(Constants.hombrokP);
         pid.setI(Constants.hombrokI);
-        pid.setD(0);
+        pid.setD(Constants.hombrokD);
         pid.setFF(0);
-        pid.setOutputRange(-0.3, 0.3);
+        pid.setOutputRange(-0.8, 0.8);
 
         previousPosition = getAbsolutePosition();
 
@@ -71,7 +71,8 @@ public class Hombro extends SubsystemBase{
 
     public void periodic(){
         SmartDashboard.putNumber("relative Position", getRelativePosition());
-
+        SmartDashboard.putNumber("absolute Position", getAbsolutePosition());
+        /* 
         if(previousPosition - getAbsolutePosition() < -1.5){
             relativePosition = -2 + getAbsolutePosition();
         }else if(previousPosition - getAbsolutePosition() < -0.5){
@@ -83,10 +84,17 @@ public class Hombro extends SubsystemBase{
         }
 
         previousPosition = relativePosition;
+        */
+
     }
 
     public double getAbsolutePosition(){
-        return encoder.getPosition();
+        if (encoder.getPosition() > 0.7){
+            return 0;
+        }
+        else {
+            return (encoder.getPosition()) ;
+        }   
     }
 
     public double getRelativePosition(){
