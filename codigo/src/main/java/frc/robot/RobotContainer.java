@@ -7,6 +7,7 @@ import frc.robot.commands.DriveCommandModified;
 
 import frc.robot.subsystems.driveTrain.DriveTrainSubsystemModified;
 import frc.robot.subsystems.Hombro;
+import frc.robot.subsystems.Brazo;
 import frc.robot.subsystems.Garra;
 import frc.robot.commands.BrazoCommand;
 
@@ -24,7 +25,9 @@ public class RobotContainer {
 
   private final Hombro m_hombro = new Hombro(Constants.hombroId1, Constants.hombroId2, Constants.hombroId3, Constants.hombroId4);
 
-  private BrazoCommand defaultBrazoCommand =new BrazoCommand(m_hombro, m_garra, ()-> mechanismController.getLeftY(), ()-> mechanismController.getRightY(), ()-> mechanismController.getLeftTriggerAxis(), () -> mechanismController.getRightTriggerAxis(), () -> mechanismController.getAButtonPressed(), () -> mechanismController.getBButtonPressed(), () -> mechanismController.getXButtonPressed(), () -> mechanismController.getYButtonPressed());
+  private final Brazo m_brazo = new Brazo(61 , 62);
+
+  private BrazoCommand defaultBrazoCommand =new BrazoCommand(m_hombro, m_garra, m_brazo, ()->  mechanismController.getLeftY(), ()-> mechanismController.getRightY(), ()-> mechanismController.getLeftTriggerAxis(), () -> mechanismController.getRightTriggerAxis(), () -> mechanismController.getAButtonPressed(), () -> mechanismController.getBButtonPressed(), () -> mechanismController.getXButtonPressed(), () -> mechanismController.getYButtonPressed());
 
   public RobotContainer() {
     
@@ -33,6 +36,7 @@ public class RobotContainer {
    
     m_hombro.setDefaultCommand(defaultBrazoCommand);
     m_garra.setDefaultCommand(defaultBrazoCommand);
+    m_brazo.setDefaultCommand(defaultBrazoCommand);
 
 
     configureBindings();
