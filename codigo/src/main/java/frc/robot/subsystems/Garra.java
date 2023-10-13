@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.ctre.phoenix6.controls.CoastOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.StaticBrake;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -15,6 +16,8 @@ public class Garra extends SubsystemBase{
     public Garra(int wristId, int rollerId){
        this.wrist = new TalonFX(wristId);
        this.roller = new TalonFX(rollerId);
+
+       wrist.setControl(new StaticBrake());
     }
 
     public void setWrist(double speed){
@@ -37,5 +40,13 @@ public class Garra extends SubsystemBase{
    public double getWristPosition(){ 
       double position = wrist.getClosedLoopOutput().getValue();
       return position;
+   }
+
+   public void setBrake(){
+      wrist.setControl(new StaticBrake());
+   }
+
+   public void setCoast(){
+      wrist.setControl(new CoastOut());
    }
 }

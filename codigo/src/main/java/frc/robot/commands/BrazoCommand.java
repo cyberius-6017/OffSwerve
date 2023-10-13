@@ -36,8 +36,6 @@ public class BrazoCommand extends CommandBase{
         addRequirements(garra);
         addRequirements(brazo);
 
-        reqHombroPosition = hombro.getRelativePosition();
-
         reqHombroPosition = 0.04;
         reqWristPosition = 0.2;
     }

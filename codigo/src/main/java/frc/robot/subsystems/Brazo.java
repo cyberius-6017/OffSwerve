@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.controls.CoastOut;
+import com.ctre.phoenix6.controls.StaticBrake;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 
@@ -17,11 +19,23 @@ public class Brazo extends SubsystemBase{
         this.motor1 = new TalonFX(idTalon1);
         this.motor2 = new TalonFX(idTalon2);
 
+        motor1.setControl(new StaticBrake());
+        motor2.setControl(new StaticBrake());
     }
 
     public void periodic(){
         
 
+    }
+
+    public void setCoast(){
+        motor1.setControl(new CoastOut());
+        motor2.setControl(new CoastOut());
+    }
+
+    public void setBrake(){
+        motor1.setControl(new StaticBrake());
+        motor2.setControl(new StaticBrake());
     }
 
     public void setPower(double speed){

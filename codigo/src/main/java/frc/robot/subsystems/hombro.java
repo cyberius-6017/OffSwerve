@@ -20,8 +20,6 @@ public class Hombro extends SubsystemBase{
     private SparkMaxAbsoluteEncoder encoder;
     
     private SparkMaxPIDController pid;
-    private static double previousPosition;
-    private static double relativePosition;
 
     public Hombro(int idStar1, int idStar2, int idRats1, int idRats2){
         this.star1 = new CANSparkMax(idStar1, MotorType.kBrushless);
@@ -34,15 +32,16 @@ public class Hombro extends SubsystemBase{
         rats1.restoreFactoryDefaults();
         rats2.restoreFactoryDefaults();
 
-        star1.setSmartCurrentLimit(30);
-        star2.setSmartCurrentLimit(30);
-        rats1.setSmartCurrentLimit(30);
-        rats2.setSmartCurrentLimit(30);
+        star1.setSmartCurrentLimit(40);
+        star2.setSmartCurrentLimit(40);
+        rats1.setSmartCurrentLimit(40);
+        rats2.setSmartCurrentLimit(40);
 
         star1.setIdleMode(IdleMode.kBrake);
         star2.setIdleMode(IdleMode.kBrake);
         rats1.setIdleMode(IdleMode.kBrake);
         rats2.setIdleMode(IdleMode.kBrake);
+
 
         star1.setInverted(true);
 
@@ -63,28 +62,10 @@ public class Hombro extends SubsystemBase{
         pid.setD(Constants.hombrokD);
         pid.setFF(0);
         pid.setOutputRange(-0.8, 0.8);
-
-        previousPosition = getAbsolutePosition();
-
-        relativePosition = getAbsolutePosition();
     }
 
     public void periodic(){
-        SmartDashboard.putNumber("relative Position", getRelativePosition());
-        SmartDashboard.putNumber("absolute Position", getAbsolutePosition());
-        /* 
-        if(previousPosition - getAbsolutePosition() < -1.5){
-            relativePosition = -2 + getAbsolutePosition();
-        }else if(previousPosition - getAbsolutePosition() < -0.5){
-            relativePosition = -1 + getAbsolutePosition();
-        } else if (previousPosition - getAbsolutePosition() > 0.5){
-            relativePosition = 1 + getAbsolutePosition();
-        } else{
-           relativePosition = getAbsolutePosition();
-        }
-
-        previousPosition = relativePosition;
-        */
+        SmartDashboard.putNumber("hombro", getAbsolutePosition());
 
     }
 
@@ -97,9 +78,7 @@ public class Hombro extends SubsystemBase{
         }   
     }
 
-    public double getRelativePosition(){
-        return relativePosition;
-    }
+
 
     public void set(double speed){ 
         star1.set(-speed);
@@ -113,4 +92,18 @@ public class Hombro extends SubsystemBase{
         pid.setReference(velocity, ControlType.kVelocity);
     }
     
+    public void setCoast(){
+        star1.setIdleMode(IdleMode.kCoast);
+        star2.setIdleMode(IdleMode.kCoast);
+        rats1.setIdleMode(IdleMode.kCoast);
+        rats2.setIdleMode(IdleMode.kCoast);
+    }
+
+    public void setBrake(){
+        star1.setIdleMode(IdleMode.kBrake);
+        star2.setIdleMode(IdleMode.kBrake);
+        rats1.setIdleMode(IdleMode.kBrake);
+        rats2.setIdleMode(IdleMode.kBrake);
+    }
+
 }

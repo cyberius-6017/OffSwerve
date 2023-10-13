@@ -235,6 +235,19 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
     setLimitedChassisSpeeds(new ChassisSpeeds(-xSpeed, -ySpeed, zSpeed), maxSpeed);
   }
 
+  public void setCoast(){
+    flModule.setCoast();
+    frModule.setCoast();
+    rlModule.setCoast();
+    rrModule.setCoast();
+  }
+
+  public void setBrake(){
+    flModule.setBrake();
+    frModule.setBrake();
+    rlModule.setBrake();
+    rrModule.setBrake();
+  }
 
   public void periodic(){
     
