@@ -10,11 +10,14 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 import com.kauailabs.navx.frc.AHRS;
 import frc.robot.Constants;
@@ -49,6 +52,7 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
 
   private SwerveDrivePoseEstimator poseEstimator;
 
+  private Pose2d visionMeasurement;
 
   public DriveTrainSubsystemModified() {
 
@@ -258,12 +262,11 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
     odometry.update(getRotation2d(), positions);
     poseEstimator.update(getRotation2d(), positions);
 
-    SmartDashboard.putNumber("fl angle", flModule.getAdjRadians());
-    SmartDashboard.putNumber("fr angle", frModule.getAdjRadians());
-    SmartDashboard.putNumber("rl angle", rlModule.getAdjRadians());
-    SmartDashboard.putNumber("rr angle", rrModule.getAdjRadians());
-
-    
+    if(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0) == 1){
+      visionMeasurement = new Pose2d(0, 0, new Rotation2d(0));
+      poseEstimator.setVisionMeasurementStdDevs(null);
+      poseEstimator.addVisionMeasurement(visionMeasurement, Timer.getFPGATimestamp(), null);
+    }
 
     
     SmartDashboard.putString("Pose", getPose2d().getTranslation().toString());
