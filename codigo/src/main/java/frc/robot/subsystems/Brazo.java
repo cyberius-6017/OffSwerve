@@ -3,9 +3,11 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.controls.NeutralOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.StrictFollower;
+import com.ctre.phoenix6.controls.CoastOut;
+import com.ctre.phoenix6.controls.StaticBrake;
 import com.ctre.phoenix6.hardware.TalonFX;
 
-
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -26,12 +28,24 @@ public class Brazo extends SubsystemBase{
 
         motor2.setControl(new StrictFollower(62));
 
+        motor1.setControl(new StaticBrake());
+        motor2.setControl(new StaticBrake());
     }
 
     public void periodic(){
         
         SmartDashboard.putNumber("Arm Position", getEncoderPosition());
         SmartDashboard.putNumber("Duty Cycle", getMotorSpeed());
+    }
+
+    public void setCoast(){
+        motor1.setControl(new CoastOut());
+        motor2.setControl(new CoastOut());
+    }
+
+    public void setBrake(){
+        motor1.setControl(new StaticBrake());
+        motor2.setControl(new StaticBrake());
     }
 
     public void setPower(double speed){
@@ -49,6 +63,26 @@ public class Brazo extends SubsystemBase{
     }
     public double getMotorSpeed(){
         return motor1.getDutyCycle().getValue();
+    private boolean isBrake = true;
+    private boolean wasTrue = false;
+    private DigitalInput brakeButton = new DigitalInput(Constants.brakeButtonPort);
+    public void toggleBrake(){
+
+        if(!wasTrue && brakeButton.get()){
+
+        if(isBrake){
+            setCoast();
+            isBrake = false;
+        }else{
+            setBrake();
+            isBrake = true;
+        }
+
+        } 
+
+        wasTrue = brakeButton.get();
+
     }
     
 }
+
