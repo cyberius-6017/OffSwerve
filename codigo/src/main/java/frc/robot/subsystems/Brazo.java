@@ -4,7 +4,7 @@ import com.ctre.phoenix6.controls.CoastOut;
 import com.ctre.phoenix6.controls.StaticBrake;
 import com.ctre.phoenix6.hardware.TalonFX;
 
-
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -41,6 +41,27 @@ public class Brazo extends SubsystemBase{
     public void setPower(double speed){
         motor1.set(speed*0.6);
         motor2.set(speed*0.6);
+    }
+
+    private boolean isBrake = true;
+    private boolean wasTrue = false;
+    private DigitalInput brakeButton = new DigitalInput(Constants.brakeButtonPort);
+    public void toggleBrake(){
+
+        if(!wasTrue && brakeButton.get()){
+
+        if(isBrake){
+            setCoast();
+            isBrake = false;
+        }else{
+            setBrake();
+            isBrake = true;
+        }
+
+        } 
+
+        wasTrue = brakeButton.get();
+
     }
     
 }

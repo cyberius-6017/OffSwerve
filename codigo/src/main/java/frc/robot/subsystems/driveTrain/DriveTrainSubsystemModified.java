@@ -18,9 +18,13 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 import com.kauailabs.navx.frc.AHRS;
 import frc.robot.Constants;
+
 
 
 
@@ -51,8 +55,9 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
   private SwerveDriveOdometry odometry;
 
   private SwerveDrivePoseEstimator poseEstimator;
-
   private Pose2d visionMeasurement;
+  private double[] poseNums = new double[6];
+  private final Field2d field2d = new Field2d();
 
   public DriveTrainSubsystemModified() {
 
@@ -64,7 +69,7 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
       odometry = new SwerveDriveOdometry(kinematics, getRotation2d(), positions);
       poseEstimator = new SwerveDrivePoseEstimator(kinematics, getRotation2d(), positions, new Pose2d(0, 0, getRotation2d()));
 
-   
+    SmartDashboard.putData("Field", field2d);
   }
 
   public void resetNavx(){
@@ -253,6 +258,28 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
     rrModule.setBrake();
   }
 
+  private boolean isBrake = true;
+  private boolean wasTrue = false;
+  private DigitalInput brakeButton = new DigitalInput(Constants.brakeButtonPort);
+  public void toggleBrake(){
+
+      if(!wasTrue && brakeButton.get()){
+
+      if(isBrake){
+          setCoast();
+          isBrake = false;
+      }else{
+          setBrake();
+          isBrake = true;
+      }
+
+      } 
+
+      wasTrue = brakeButton.get();
+
+  }
+
+
   public void periodic(){
     
     positions[0] = flModule.getSwervePosition();
@@ -262,14 +289,22 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
     odometry.update(getRotation2d(), positions);
     poseEstimator.update(getRotation2d(), positions);
 
-    if(NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0) == 1){
-      visionMeasurement = new Pose2d(0, 0, new Rotation2d(0));
-      poseEstimator.setVisionMeasurementStdDevs(null);
-      poseEstimator.addVisionMeasurement(visionMeasurement, Timer.getFPGATimestamp(), null);
-    }
 
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
     
-    SmartDashboard.putString("Pose", getPose2d().getTranslation().toString());
+    if(table.getEntry("tv").getDouble(0) == 1){
+      poseNums = table.getEntry("botpose_wpiblue").getDoubleArray(poseNums);
+
+      visionMeasurement = new Pose2d(poseNums[0], poseNums[1], getRotation2d());
+      poseEstimator.addVisionMeasurement(visionMeasurement, Timer.getFPGATimestamp());
+    }
+    field2d.setRobotPose(poseEstimator.getEstimatedPosition());
+    
+    SmartDashboard.putString("Odometry pose", getPose2d().getTranslation().toString());
+    SmartDashboard.putString("Pose Estimate", poseEstimator.getEstimatedPosition().getTranslation().toString());
+    
+
+    toggleBrake();
   }
 
   public Pose2d getPose2d(){

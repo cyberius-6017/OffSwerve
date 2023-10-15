@@ -85,8 +85,17 @@ public class SwerveModule extends SubsystemBase{
       return new SwerveModulePosition(getDrivePosition(), new Rotation2d(getAdjRadians()));
     }
 
+    public Rotation2d getStateRotation(){
+
+      double angle = getAdjRadians() + Constants.pi/2;
+      if(angle > 2*Constants.pi){
+        angle -= 2*Constants.pi;
+      }
+      return new Rotation2d(angle);
+    }
+
     public SwerveModuleState getSwerveState(){
-       return new SwerveModuleState(getDriveVelocity(), new Rotation2d(getAdjRadians()));
+       return new SwerveModuleState(getDriveVelocity(), getStateRotation());
     }
 
 

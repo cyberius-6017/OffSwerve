@@ -10,13 +10,13 @@ import frc.robot.subsystems.Hombro;
 import frc.robot.subsystems.Brazo;
 import frc.robot.subsystems.Garra;
 import frc.robot.commands.BrazoCommand;
-
-
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
  
 public class RobotContainer {
   private final DriveTrainSubsystemModified m_DriveTrainSubsystemModified = new DriveTrainSubsystemModified();
+
+  
  
   private final XboxController driveController = new XboxController(Constants.driveControllerID);
   private final XboxController mechanismController = new XboxController(Constants.mechanismControllerId);
@@ -29,14 +29,18 @@ public class RobotContainer {
 
   private BrazoCommand defaultBrazoCommand =new BrazoCommand(m_hombro, m_garra, m_brazo, ()->  mechanismController.getLeftY(), ()-> mechanismController.getRightY(), ()-> mechanismController.getLeftTriggerAxis(), () -> mechanismController.getRightTriggerAxis(), () -> mechanismController.getAButtonPressed(), () -> mechanismController.getBButtonPressed(), () -> mechanismController.getXButtonPressed(), () -> mechanismController.getYButtonPressed());
 
+
+  
+
   public RobotContainer() {
     
     m_DriveTrainSubsystemModified.setDefaultCommand(new DriveCommandModified(m_DriveTrainSubsystemModified, () -> driveController.getLeftX(),
     () -> driveController.getLeftY(), () -> driveController.getRightX(), () -> driveController.getRightBumperPressed(), () -> driveController.getBButtonPressed()));
    
-    m_hombro.setDefaultCommand(defaultBrazoCommand);
-    m_garra.setDefaultCommand(defaultBrazoCommand);
-    m_brazo.setDefaultCommand(defaultBrazoCommand);
+    //m_hombro.setDefaultCommand(defaultBrazoCommand);
+    //m_garra.setDefaultCommand(defaultBrazoCommand);
+    //m_brazo.setDefaultCommand(defaultBrazoCommand);
+
 
 
     configureBindings();
@@ -44,10 +48,11 @@ public class RobotContainer {
 
   private void configureBindings() {
     
-   
-    
 
     
+  
+
+
     System.out.println("Corriendo \\(-v-)/");
   }
 

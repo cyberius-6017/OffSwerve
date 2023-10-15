@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax.IdleMode;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -20,6 +21,7 @@ public class Hombro extends SubsystemBase{
     private SparkMaxAbsoluteEncoder encoder;
     
     private SparkMaxPIDController pid;
+    
 
     public Hombro(int idStar1, int idStar2, int idRats1, int idRats2){
         this.star1 = new CANSparkMax(idStar1, MotorType.kBrushless);
@@ -67,6 +69,7 @@ public class Hombro extends SubsystemBase{
     public void periodic(){
         SmartDashboard.putNumber("hombro", getAbsolutePosition());
 
+        
     }
 
     public double getAbsolutePosition(){
@@ -106,4 +109,24 @@ public class Hombro extends SubsystemBase{
         rats2.setIdleMode(IdleMode.kBrake);
     }
 
+    private boolean isBrake = true;
+    private boolean wasTrue = false;
+    private DigitalInput brakeButton = new DigitalInput(Constants.brakeButtonPort);
+    public void toggleBrake(){
+
+        if(!wasTrue && brakeButton.get()){
+
+        if(isBrake){
+            setCoast();
+            isBrake = false;
+        }else{
+            setBrake();
+            isBrake = true;
+        }
+
+        } 
+
+        wasTrue = brakeButton.get();
+
+    }
 }

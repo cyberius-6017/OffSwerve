@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 import com.ctre.phoenix6.controls.CoastOut;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
@@ -49,4 +51,25 @@ public class Garra extends SubsystemBase{
    public void setCoast(){
       wrist.setControl(new CoastOut());
    }
+
+    private boolean isBrake = true;
+    private boolean wasTrue = false;
+    private DigitalInput brakeButton = new DigitalInput(Constants.brakeButtonPort);
+    public void toggleBrake(){
+
+        if(!wasTrue && brakeButton.get()){
+
+        if(isBrake){
+            setCoast();
+            isBrake = false;
+        }else{
+            setBrake();
+            isBrake = true;
+        }
+
+        } 
+
+        wasTrue = brakeButton.get();
+
+    }
 }
