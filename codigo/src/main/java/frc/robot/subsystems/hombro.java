@@ -20,7 +20,7 @@ public class Hombro extends SubsystemBase{
     private SparkMaxAbsoluteEncoder encoder;
     
     private SparkMaxPIDController pid;
-    private static double previousPosition;
+    //private static double previousPosition;
     private static double relativePosition;
 
     public Hombro(int idStar1, int idStar2, int idRats1, int idRats2){
@@ -64,7 +64,7 @@ public class Hombro extends SubsystemBase{
         pid.setFF(0);
         pid.setOutputRange(-0.8, 0.8);
 
-        previousPosition = getAbsolutePosition();
+        //previousPosition = getAbsolutePosition();
 
         relativePosition = getAbsolutePosition();
     }
@@ -112,5 +112,8 @@ public class Hombro extends SubsystemBase{
     public void setVelocity(double velocity){
         pid.setReference(velocity, ControlType.kVelocity);
     }
-    
+    public double getDutyCycle(){
+        return star1.getAppliedOutput();
+    }
+
 }
