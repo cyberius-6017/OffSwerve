@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.ctre.phoenix6.controls.CoastOut;
 import com.ctre.phoenix6.controls.StaticBrake;
 //import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -182,5 +183,15 @@ public class SwerveModule extends SubsystemBase{
         } 
         SmartDashboard.putNumber("Error xd: " , p);
         return p;
+      }
+
+      public void setBrake(){
+        turnMotor.setIdleMode(IdleMode.kBrake);
+        driveMotor.setControl(new StaticBrake());
+      }
+
+      public void setCoast(){
+        turnMotor.setIdleMode(IdleMode.kCoast);
+        driveMotor.setControl(new CoastOut());
       }
 }

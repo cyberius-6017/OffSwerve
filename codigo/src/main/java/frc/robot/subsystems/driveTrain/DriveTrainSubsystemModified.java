@@ -10,16 +10,20 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import java.util.function.Supplier;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 import com.kauailabs.navx.frc.AHRS;
 import frc.robot.Constants;
 
-
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 
 public class DriveTrainSubsystemModified extends SubsystemBase {
@@ -49,18 +53,22 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
 
   private SwerveDrivePoseEstimator poseEstimator;
 
+  private Supplier<Boolean> brakeButton;
+  private double[] poseNums = new double[6];
+  private Pose2d visionMeasurement;
+  private Field2d field2d = new Field2d();
 
-  public DriveTrainSubsystemModified() {
+  public DriveTrainSubsystemModified(Supplier<Boolean> brakeButton) {
 
     //reset yaw navx sin interrumpir código
     //es posible que interfiera en odometría
      
       navx.reset();
       
-      odometry = new SwerveDriveOdometry(kinematics, getRotation2d(), positions);
-      poseEstimator = new SwerveDrivePoseEstimator(kinematics, getRotation2d(), positions, new Pose2d(0, 0, getRotation2d()));
+      odometry = new SwerveDriveOdometry(kinematics, getPoseRotation2d(), positions);
+      poseEstimator = new SwerveDrivePoseEstimator(kinematics, getPoseRotation2d(), positions, new Pose2d(0, 0, getPoseRotation2d()));
 
-   
+      this.brakeButton = brakeButton;
   }
 
   public void resetNavx(){
@@ -97,6 +105,16 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
   }
 
   public Rotation2d getRotation2d(){
+    return new Rotation2d(getNavxYawRadians());
+  }
+
+  public Rotation2d getPoseRotation2d(){
+    double angle = getNavxYawRadians();
+  
+
+    if(angle > 2* Constants.pi){
+      angle -= 2* Constants.pi;
+    }
     return new Rotation2d(getNavxYawRadians());
   }
 
@@ -242,18 +260,60 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
     positions[1] = frModule.getSwervePosition(); 
     positions[2] = rlModule.getSwervePosition();
     positions[3] = rrModule.getSwervePosition(); 
-    odometry.update(getRotation2d(), positions);
-    poseEstimator.update(getRotation2d(), positions);
+    odometry.update(getPoseRotation2d(), positions);
+    poseEstimator.update(getPoseRotation2d(), positions);
 
-    SmartDashboard.putNumber("fl angle", flModule.getAdjRadians());
-    SmartDashboard.putNumber("fr angle", frModule.getAdjRadians());
-    SmartDashboard.putNumber("rl angle", rlModule.getAdjRadians());
-    SmartDashboard.putNumber("rr angle", rrModule.getAdjRadians());
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
-    
+    if(table.getEntry("tv").getDouble(0) == 1){
+      poseNums = table.getEntry("botpose_wpiblue").getDoubleArray(poseNums);
 
-    
-    SmartDashboard.putString("Pose", getPose2d().getTranslation().toString());
+      visionMeasurement = new Pose2d(poseNums[0], poseNums[1], getPoseRotation2d());
+      poseEstimator.addVisionMeasurement(visionMeasurement, Timer.getFPGATimestamp());
+    }
+    field2d.setRobotPose(odometry.getPoseMeters());
+
+    toggleBrake();
+
+    SmartDashboard.putData(field2d);
+    SmartDashboard.putString("Pose Estimate", poseEstimator.getEstimatedPosition().getTranslation().toString());
+    SmartDashboard.putString("Odometry  Pose", getPose2d().getTranslation().toString());
+  }
+
+  public void setOdoToLimelight(){
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    poseNums = table.getEntry("botpose_wpiblue").getDoubleArray(poseNums);
+
+    visionMeasurement = new Pose2d(poseNums[0], poseNums[1], getPoseRotation2d());
+    double rotation = getPoseRotation2d().getRadians();
+    rotation += Constants.pi/2;
+    if(rotation > 2*Constants.pi){
+      rotation-= 2*Constants.pi;
+    }
+    odometry.resetPosition(new Rotation2d(rotation), positions, visionMeasurement);
+  }
+
+  public void updateOdo(){
+    positions[0] = flModule.getSwervePosition();
+    positions[1] = frModule.getSwervePosition(); 
+    positions[2] = rlModule.getSwervePosition();
+    positions[3] = rrModule.getSwervePosition(); 
+    odometry.update(getPoseRotation2d(), positions);
+    poseEstimator.update(getPoseRotation2d(), positions);
+
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+
+    if(table.getEntry("tv").getDouble(0) == 1){
+      poseNums = table.getEntry("botpose_wpiblue").getDoubleArray(poseNums);
+
+      visionMeasurement = new Pose2d(poseNums[0], poseNums[1], getRotation2d());
+      poseEstimator.addVisionMeasurement(visionMeasurement, Timer.getFPGATimestamp());
+    }
+    field2d.setRobotPose(poseEstimator.getEstimatedPosition());
+
+    SmartDashboard.putData(field2d);
+    SmartDashboard.putString("Pose Estimate", poseEstimator.getEstimatedPosition().toString());
+    SmartDashboard.putString("Odometry  Pose", getPose2d().toString());
   }
 
   public Pose2d getPose2d(){
@@ -261,11 +321,41 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
   }
 
   public void resetOdometry(){
-     odometry.resetPosition(getRotation2d(), positions, new Pose2d(0, 0, getRotation2d()));
-     poseEstimator.resetPosition(getRotation2d(), positions, new Pose2d(0,0, getRotation2d()));
+     odometry.resetPosition(getPoseRotation2d(), positions, new Pose2d(0, 0, getPoseRotation2d()));
+     poseEstimator.resetPosition(getPoseRotation2d(), positions, new Pose2d(0,0, getPoseRotation2d()));
   }
 
+  public void setBrake(){
+    flModule.setBrake();
+    frModule.setBrake();
+    rlModule.setBrake();
+    rrModule.setBrake();
+  }
 
+  public void setCoast(){
+    flModule.setCoast();
+    frModule.setCoast();
+    rlModule.setCoast();
+    rrModule.setCoast();
+  }
   
+  
+    
+  private boolean wasPressed = false;
+  private boolean isBrake = true;
 
+  public void toggleBrake(){
+
+      if(!wasPressed & !brakeButton.get()){
+          if(isBrake){
+              setCoast();
+
+          } else{
+              setBrake();
+          }
+
+          isBrake = !isBrake;
+      }
+      wasPressed = !brakeButton.get();
+  }
 }

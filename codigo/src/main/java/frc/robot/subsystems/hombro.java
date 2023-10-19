@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.function.Supplier;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -18,16 +20,19 @@ public class Hombro extends SubsystemBase{
     private CANSparkMax rats1; 
     private CANSparkMax rats2; 
     private SparkMaxAbsoluteEncoder encoder;
+    private Supplier<Boolean> brakeButton;
+  
     
     private SparkMaxPIDController pid;
-    //private static double previousPosition;
-    private static double relativePosition;
 
-    public Hombro(int idStar1, int idStar2, int idRats1, int idRats2){
+
+    public Hombro(int idStar1, int idStar2, int idRats1, int idRats2, Supplier<Boolean> brakeButton){
         this.star1 = new CANSparkMax(idStar1, MotorType.kBrushless);
         this.star2 = new CANSparkMax(idStar2, MotorType.kBrushless);
         this.rats1 = new CANSparkMax(idRats1, MotorType.kBrushless);
         this.rats2 = new CANSparkMax(idRats2, MotorType.kBrushless);
+
+        this.brakeButton = brakeButton;
 
         star1.restoreFactoryDefaults();
         star2.restoreFactoryDefaults();
@@ -64,14 +69,11 @@ public class Hombro extends SubsystemBase{
         pid.setFF(0);
         pid.setOutputRange(-0.8, 0.8);
 
-        //previousPosition = getAbsolutePosition();
-
-        relativePosition = getAbsolutePosition();
+        
     }
 
     public void periodic(){
-        SmartDashboard.putNumber("relative Position", getRelativePosition());
-        SmartDashboard.putNumber("absolute Position", getAbsolutePosition());
+        SmartDashboard.putNumber("hombro Position", getAbsolutePosition());
         /* 
         if(previousPosition - getAbsolutePosition() < -1.5){
             relativePosition = -2 + getAbsolutePosition();
@@ -86,6 +88,7 @@ public class Hombro extends SubsystemBase{
         previousPosition = relativePosition;
         */
 
+        toggleBrake();
     }
 
     public double getAbsolutePosition(){
@@ -95,10 +98,6 @@ public class Hombro extends SubsystemBase{
         else {
             return (encoder.getPosition()) ;
         }   
-    }
-
-    public double getRelativePosition(){
-        return relativePosition;
     }
 
     public void set(double speed){ 
@@ -115,5 +114,37 @@ public class Hombro extends SubsystemBase{
     public double getDutyCycle(){
         return star1.getAppliedOutput();
     }
+    public void setBrake(){
+        star1.setIdleMode(IdleMode.kBrake);
+        star2.setIdleMode(IdleMode.kBrake);
+        rats1.setIdleMode(IdleMode.kBrake);
+        rats2.setIdleMode(IdleMode.kBrake);
+    }
+
+    public void setCoast(){
+        star1.setIdleMode(IdleMode.kCoast);
+        star2.setIdleMode(IdleMode.kCoast);
+        rats1.setIdleMode(IdleMode.kCoast);
+        rats2.setIdleMode(IdleMode.kCoast);
+    }
+
+    private boolean wasPressed = false;
+    private boolean isBrake = true;
+
+    public void toggleBrake(){
+
+        if(!wasPressed & !brakeButton.get()){
+            if(isBrake){
+                setCoast();
+
+            } else{
+                setBrake();
+            }
+
+            isBrake = !isBrake;
+        }
+        wasPressed = !brakeButton.get();
+    }
+  
 
 }
