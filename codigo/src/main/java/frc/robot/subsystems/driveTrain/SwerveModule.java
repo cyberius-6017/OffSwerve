@@ -138,8 +138,13 @@ public class SwerveModule extends SubsystemBase{
         double p = 0;
       
     
-        if (frontP > Constants.pi){rearP = frontP - Constants.pi;}
-          else {rearP = frontP + Constants.pi;}
+        if (frontP > Constants.pi){
+          rearP = frontP - Constants.pi;
+        }
+          else {
+            rearP = frontP + Constants.pi;
+        }
+
     
         double d1 = frontP - reqDir;
         if (d1 < 0){
@@ -148,6 +153,8 @@ public class SwerveModule extends SubsystemBase{
           //negative = -1;
         }
         double d2 = 2 * Constants.pi - d1;
+        
+        
         double d3 = rearP - reqDir;
         if (d3 < 0){
           d3 = 2 * Constants.pi + d3;

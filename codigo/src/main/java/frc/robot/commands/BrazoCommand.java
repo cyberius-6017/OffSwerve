@@ -16,7 +16,7 @@ public class BrazoCommand extends CommandBase{
     private Garra garra;
     private Brazo brazo;
     private Supplier<Double> rightY, leftTrigger, rightTrigger;
-    private Supplier<Boolean> aButton, bButton, xButton, yButton, selButton, rBump, rStickPress, leftBumper;
+    private Supplier<Boolean> aButton, bButton, xButton, yButton, selButton, rBump, rStickPress, leftBumper, lStickPress;
 
     private static double reqHombroPosition;
     private static double reqWristPosition;
@@ -27,7 +27,7 @@ public class BrazoCommand extends CommandBase{
     
     
     public BrazoCommand(Hombro hombro, Garra garra, Brazo brazo, Supplier<Double> leftY,  Supplier<Double> rightY, Supplier<Double> leftTrigger, Supplier<Double> rightTrigger, Supplier<Boolean> aButton, Supplier<Boolean> bButton, Supplier<Boolean> xButton, Supplier<Boolean> yButton, Supplier
-    <Boolean> selButton, Supplier<Boolean>rBump, Supplier<Boolean> rStickPress, Supplier<Boolean> leftBumper){
+    <Boolean> selButton, Supplier<Boolean>rBump, Supplier<Boolean> rStickPress, Supplier<Boolean> leftBumper, Supplier<Boolean> lStickPress){
         this.hombro = hombro;
         this.garra = garra;
         this.brazo = brazo;
@@ -42,6 +42,7 @@ public class BrazoCommand extends CommandBase{
         this.rBump = rBump;
         this.rStickPress = rStickPress;
         this.leftBumper = leftBumper;
+        this.lStickPress = lStickPress;
       
 
         addRequirements(hombro);
@@ -81,7 +82,7 @@ public class BrazoCommand extends CommandBase{
 
 
         if(selButton.get()){
-          reqHombroPosition = 0.04;
+          reqHombroPosition = 0.15;
           reqWristPosition = 2.0;
           reqArmPosition = 0.4;
           brazo.setArmPositon(reqArmPosition);
@@ -176,14 +177,30 @@ public class BrazoCommand extends CommandBase{
           brazo.setArmPositon(reqArmPosition);
           wasArriba = true;
         }
+        if(lStickPress.get()){
+          reqHombroPosition = 0.04;
+          reqWristPosition = 2.0;
+          reqArmPosition = 0.4;
+          brazo.setArmPositon(reqArmPosition);
+          
+          if(wasArriba){
+            Timer.delay(0.3);
+            hombro.setPosition(reqHombroPosition);
+            Timer.delay(0.5);
+            brazo.setReading(1);
+          } else{
+            hombro.setPosition(reqHombroPosition);
+          }
+          wasArriba = false;
+        }
 
         //reqHombroPosition += hombroPoder.get() * 0.01;
 
         if(cube){
-          garra.setRoller(-rollerSpeed);
+          garra.setRoller(-rollerSpeed, cube);
         }
         else{
-          garra.setRoller(rollerSpeed);
+          garra.setRoller(rollerSpeed, cube);
         }
 
         if(Math.abs(rightY.get())>0.5){

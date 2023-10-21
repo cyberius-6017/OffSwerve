@@ -6,6 +6,8 @@ package frc.robot;
 import frc.robot.commands.DriveCommandModified;
 
 import frc.robot.subsystems.driveTrain.DriveTrainSubsystemModified;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Hombro;
 import frc.robot.subsystems.Brazo;
 import frc.robot.subsystems.Garra;
@@ -32,7 +34,12 @@ public class RobotContainer {
 
   private final Brazo m_brazo = new Brazo(47 , 48, () -> brakeButton.get());
 
-  private BrazoCommand defaultBrazoCommand =new BrazoCommand(m_hombro, m_garra, m_brazo, ()->  mechanismController.getLeftY(), ()-> mechanismController.getRightY(), ()-> mechanismController.getLeftTriggerAxis(), () -> mechanismController.getRightTriggerAxis(), () -> mechanismController.getAButtonPressed(), () -> mechanismController.getBButtonPressed(), () -> mechanismController.getXButtonPressed(), () -> mechanismController.getYButtonPressed(), ()-> mechanismController.getStartButtonPressed(), ()-> mechanismController.getRightBumperPressed(), () -> mechanismController.getRightStickButtonPressed(), () -> mechanismController.getLeftBumperPressed());
+  private BrazoCommand defaultBrazoCommand =new BrazoCommand(m_hombro, m_garra, m_brazo, ()->  mechanismController.getLeftY(), ()-> mechanismController.getRightY(), ()-> mechanismController.getLeftTriggerAxis(), () -> mechanismController.getRightTriggerAxis(), () -> mechanismController.getAButtonPressed(), () -> mechanismController.getBButtonPressed(), () -> mechanismController.getXButtonPressed(), () -> mechanismController.getYButtonPressed(), ()-> mechanismController.getStartButtonPressed(), ()-> mechanismController.getRightBumperPressed(), () -> mechanismController.getRightStickButtonPressed(), () -> mechanismController.getLeftBumperPressed(), () -> mechanismController.getLeftStickButtonPressed());
+
+  private final Command autoCommand = new AutoCommand(m_DriveTrainSubsystemModified, m_hombro, m_garra, m_brazo);
+  private final Command autoRojoDerecha = new AutoRojoDerecha(m_DriveTrainSubsystemModified, m_hombro, m_garra, m_brazo);
+
+  private SendableChooser<Command> autoChooser = new SendableChooser<>();
 
   public RobotContainer() {
     
@@ -43,6 +50,11 @@ public class RobotContainer {
     m_garra.setDefaultCommand(defaultBrazoCommand);
     m_brazo.setDefaultCommand(defaultBrazoCommand);
 
+
+    autoChooser.addOption("Balance", autoCommand);
+    autoChooser.addOption("Rojo libre", autoRojoDerecha);
+
+    SmartDashboard.putData("autos",autoChooser);
 
     configureBindings();
   }
@@ -59,7 +71,7 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
 
-   return new AutoCommand(m_DriveTrainSubsystemModified, m_hombro, m_garra, m_brazo);
+   return autoChooser.getSelected();
 
 
   }

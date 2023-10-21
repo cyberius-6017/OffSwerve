@@ -91,6 +91,8 @@ public final class Constants {
     public static final double hombrokI = 0.0;
     public static final double hombrokD = 0.00002;
 
+    public static final double gripHZ = 2;
+
   public static class OperatorConstants {
     
   }

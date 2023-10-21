@@ -64,13 +64,13 @@ public class AutoCommand extends CommandBase{
  
       if(!done){
 
-      garra.setRoller(0);
+      garra.setRoller(0, false);
       hombro.setPosition(reqHombroPosition);
       garra.setWristPosition(reqWristPosition);
       Timer.delay(0.8);
       brazo.setArmPositon(reqArmPosition);
       Timer.delay(0.5);
-      garra.setRoller(-0.5);
+      garra.setRoller(-0.5, false);
       Timer.delay(1);
 
 
@@ -86,7 +86,7 @@ public class AutoCommand extends CommandBase{
       flag = false;
       while(!flag){
         driveTrain.setFieldOrientedSpeeds(0,-0.6, 0);
-        garra.setRoller(0);
+        garra.setRoller(0, false);
         if(driveTrain.getPose2d().getX() < -2.4){
           flag = true;
         }
