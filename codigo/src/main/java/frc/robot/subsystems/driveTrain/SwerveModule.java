@@ -98,6 +98,9 @@ public class SwerveModule extends SubsystemBase{
 
 
         turnMotor.set(pSet(dir) * Constants.moduleTurnkP);
+
+
+        
         if(state.speedMetersPerSecond < 0.05 && state.speedMetersPerSecond > -0.05){
           driveMotor.setControl(brake);
         } else{
@@ -132,6 +135,7 @@ public class SwerveModule extends SubsystemBase{
     }
 
     private double pSet(double reqDir){
+
         double rearP = 0;
         double eError = 0;
         double frontP = getAdjRadians();
