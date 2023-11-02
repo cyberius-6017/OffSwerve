@@ -111,7 +111,7 @@ public class BrazoCommand extends CommandBase{
         if(aButton.get()){
          
           if(cube){
-            TimingThread thread = new TimingThread(0.004,0.4,10.5,false, wasArriba);
+            TimingThread thread = new TimingThread(0.004,0.4,10.0,false, wasArriba);
             thread.start();
           } else{
             TimingThread thread = new TimingThread(0.004,0.4,13.9,false, wasArriba);
