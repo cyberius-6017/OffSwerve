@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
-public class AutoCommand extends CommandBase{
+public class AutoNoMove extends CommandBase{
 
     private DriveTrainSubsystemModified driveTrain;
     private Hombro hombro;
@@ -21,7 +21,7 @@ public class AutoCommand extends CommandBase{
 
     
     
-    public AutoCommand(DriveTrainSubsystemModified driveTrain, Hombro hombro, Garra garra, Brazo brazo){
+    public AutoNoMove(DriveTrainSubsystemModified driveTrain, Hombro hombro, Garra garra, Brazo brazo){
         this.driveTrain = driveTrain;
         this.hombro = hombro;
         this.garra = garra;
@@ -82,26 +82,10 @@ public class AutoCommand extends CommandBase{
       hombro.setPosition(reqHombroPosition);
       Timer.delay(1.3);
       brazo.setReading(0.4);
-      
-      flag = false;
-      while(!flag){
-        driveTrain.setFieldOrientedSpeeds(0,-0.6, 0);
-        garra.setRoller(0, false);
-        if(driveTrain.getPose2d().getX() < -2.4){
-          flag = true;
-        }
-        driveTrain.updateOdo();
-      }
-      }
+
       done = true;
-      
-      double navxReading = driveTrain.getNavxRollDegrees();
-      double ySpeed = navxReading * 0.015;
-      driveTrain.setFieldOrientedSpeeds(0, ySpeed, 0);
-      SmartDashboard.putNumber("navx reading",navxReading);
-      SmartDashboard.putNumber("ySpped", ySpeed);
-        
-        
+    }
+
       
 
     }

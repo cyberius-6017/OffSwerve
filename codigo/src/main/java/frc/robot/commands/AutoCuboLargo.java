@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
-public class AutoCommand extends CommandBase{
+public class AutoCuboLargo extends CommandBase{
 
     private DriveTrainSubsystemModified driveTrain;
     private Hombro hombro;
@@ -21,7 +21,7 @@ public class AutoCommand extends CommandBase{
 
     
     
-    public AutoCommand(DriveTrainSubsystemModified driveTrain, Hombro hombro, Garra garra, Brazo brazo){
+    public AutoCuboLargo(DriveTrainSubsystemModified driveTrain, Hombro hombro, Garra garra, Brazo brazo){
         this.driveTrain = driveTrain;
         this.hombro = hombro;
         this.garra = garra;
@@ -45,9 +45,9 @@ public class AutoCommand extends CommandBase{
     @Override
     public void initialize() {
   
-      reqWristPosition =8.3;
-      reqArmPosition = 8.7;
-      reqHombroPosition = 0.395;
+      reqHombroPosition = 0.4;
+      reqWristPosition = 0.3;
+      reqArmPosition = 0.4;
       done = false;
       flag = false;
 
@@ -64,13 +64,13 @@ public class AutoCommand extends CommandBase{
  
       if(!done){
 
-      garra.setRoller(0, false);
+      garra.setRoller(0, true);
       hombro.setPosition(reqHombroPosition);
       garra.setWristPosition(reqWristPosition);
       Timer.delay(0.8);
       brazo.setArmPositon(reqArmPosition);
       Timer.delay(0.5);
-      garra.setRoller(-0.5, false);
+      garra.setRoller(0.5, true);
       Timer.delay(1);
 
 
@@ -86,8 +86,8 @@ public class AutoCommand extends CommandBase{
       flag = false;
       while(!flag){
         driveTrain.setFieldOrientedSpeeds(0,-0.6, 0);
-        garra.setRoller(0, false);
-        if(driveTrain.getPose2d().getX() < -2.4){
+        garra.setRoller(0, true);
+        if(driveTrain.getPose2d().getX() < -4){
           flag = true;
         }
         driveTrain.updateOdo();

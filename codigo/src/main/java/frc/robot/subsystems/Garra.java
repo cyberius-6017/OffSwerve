@@ -10,6 +10,9 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.fasterxml.jackson.databind.introspect.ConcreteBeanPropertyBase;
 
 import java.util.function.Supplier;
+
+import org.opencv.video.SparsePyrLKOpticalFlow;
+
 import edu.wpi.first.wpilibj.Timer;
 
 public class Garra extends SubsystemBase{
@@ -22,6 +25,8 @@ public class Garra extends SubsystemBase{
     private double startTime;
 
     Timer timer = new Timer();
+
+    Timer timer1 = new Timer();
 
     public Garra(int wristId, int rollerId, Supplier<Boolean> brakeButton){
        this.wrist = new TalonFX(wristId);
@@ -44,21 +49,23 @@ public class Garra extends SubsystemBase{
     }
 
     public void setRoller(double speed, boolean isCube){
-
-
+      
+      
       double velocity = Math.abs(roller.getRotorVelocity().getValue());
 
       
 
       if(isCube){
          if(speed < 0){
-            if(velocity - previousVelocity > 0 && !hasPiece){
+            if(velocity - previousVelocity > -3 && !hasPiece){
                roller.set(speed);
+               
 
             } else {
                roller.stopMotor();
                hasPiece = true;
                startTime = Timer.getFPGATimestamp();
+               timer1.restart();
 
             }
          } else{
@@ -67,34 +74,22 @@ public class Garra extends SubsystemBase{
             hasPiece = false;
          }
       } else{
-         if(speed > 0){
-            if(velocity - previousVelocity > 0 && !hasPiece){
-               roller.set(speed);
-
-            } else {
-               roller.stopMotor();
-               hasPiece = true;
-               startTime = Timer.getFPGATimestamp();
-
-            }
-         } else{
-            roller.set(speed);
-            hasPiece = false;
-         }
+        roller.set(speed);
       }
 
       if(hasPiece){
-         if(Timer.getFPGATimestamp() - startTime > 1 / Constants.gripHZ){
+
+         if(true){
             if(isCube){
                roller.set(-0.1);
                timer.start();
                
             } else{
-               roller.set(0.1);
-               timer.start();
+               roller.set(speed);
             }
-            if(timer.get() > 0.1){
+            if(timer.get() > 0.2){
                startTime = Timer.getFPGATimestamp();
+               
                
                timer.stop();
                timer.reset();

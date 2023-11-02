@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
-public class AutoCommand extends CommandBase{
+public class AutoLongSide extends CommandBase{
 
     private DriveTrainSubsystemModified driveTrain;
     private Hombro hombro;
@@ -21,7 +21,7 @@ public class AutoCommand extends CommandBase{
 
     
     
-    public AutoCommand(DriveTrainSubsystemModified driveTrain, Hombro hombro, Garra garra, Brazo brazo){
+    public AutoLongSide(DriveTrainSubsystemModified driveTrain, Hombro hombro, Garra garra, Brazo brazo){
         this.driveTrain = driveTrain;
         this.hombro = hombro;
         this.garra = garra;
@@ -87,7 +87,7 @@ public class AutoCommand extends CommandBase{
       while(!flag){
         driveTrain.setFieldOrientedSpeeds(0,-0.6, 0);
         garra.setRoller(0, false);
-        if(driveTrain.getPose2d().getX() < -2.4){
+        if(driveTrain.getPose2d().getX() < -4){
           flag = true;
         }
         driveTrain.updateOdo();

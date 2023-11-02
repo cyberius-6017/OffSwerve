@@ -11,7 +11,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Hombro;
 import frc.robot.subsystems.Brazo;
 import frc.robot.subsystems.Garra;
+import frc.robot.commands.AutoBrazoMuerto;
 import frc.robot.commands.AutoCommand;
+import frc.robot.commands.AutoCuboBalance;
+import frc.robot.commands.AutoCuboLargo;
+import frc.robot.commands.AutoLongSide;
+import frc.robot.commands.AutoNoMove;
 import frc.robot.commands.AutoRojoDerecha;
 import frc.robot.commands.BrazoCommand;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -38,6 +43,11 @@ public class RobotContainer {
 
   private final Command autoCommand = new AutoCommand(m_DriveTrainSubsystemModified, m_hombro, m_garra, m_brazo);
   private final Command autoRojoDerecha = new AutoRojoDerecha(m_DriveTrainSubsystemModified, m_hombro, m_garra, m_brazo);
+  private final Command autoLongSide = new AutoLongSide(m_DriveTrainSubsystemModified, m_hombro, m_garra, m_brazo);
+  private final Command autoNoMove = new AutoNoMove(m_DriveTrainSubsystemModified, m_hombro, m_garra, m_brazo);
+  private final Command autoBrazoMuerto = new AutoBrazoMuerto(m_DriveTrainSubsystemModified, m_hombro, m_garra, m_brazo);
+  private final Command autoCuboLargo = new AutoCuboLargo(m_DriveTrainSubsystemModified, m_hombro, m_garra, m_brazo);
+  private final Command autoCuboBalance = new AutoCuboBalance(m_DriveTrainSubsystemModified, m_hombro, m_garra, m_brazo);
 
   private SendableChooser<Command> autoChooser = new SendableChooser<>();
 
@@ -53,6 +63,13 @@ public class RobotContainer {
 
     autoChooser.addOption("Balance", autoCommand);
     autoChooser.addOption("Rojo libre", autoRojoDerecha);
+    autoChooser.addOption("lado largo", autoLongSide);
+    autoChooser.addOption("no move", autoNoMove);
+    autoChooser.addOption("brazo murio", autoBrazoMuerto);
+    autoChooser.addOption("cubo largo", autoCuboLargo);
+    autoChooser.addOption("cubo balance", autoCuboBalance);
+    autoChooser.setDefaultOption("no move", autoNoMove);
+
 
     SmartDashboard.putData("autos",autoChooser);
 

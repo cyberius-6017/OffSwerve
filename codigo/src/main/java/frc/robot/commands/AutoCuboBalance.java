@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
-public class AutoCommand extends CommandBase{
+public class AutoCuboBalance extends CommandBase{
 
     private DriveTrainSubsystemModified driveTrain;
     private Hombro hombro;
@@ -21,7 +21,7 @@ public class AutoCommand extends CommandBase{
 
     
     
-    public AutoCommand(DriveTrainSubsystemModified driveTrain, Hombro hombro, Garra garra, Brazo brazo){
+    public AutoCuboBalance(DriveTrainSubsystemModified driveTrain, Hombro hombro, Garra garra, Brazo brazo){
         this.driveTrain = driveTrain;
         this.hombro = hombro;
         this.garra = garra;
@@ -45,9 +45,9 @@ public class AutoCommand extends CommandBase{
     @Override
     public void initialize() {
   
-      reqWristPosition =8.3;
-      reqArmPosition = 8.7;
-      reqHombroPosition = 0.395;
+      reqHombroPosition = 0.4;
+      reqWristPosition = 0.3;
+      reqArmPosition = 0.4;
       done = false;
       flag = false;
 

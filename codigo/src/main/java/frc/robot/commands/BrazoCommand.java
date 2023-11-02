@@ -82,7 +82,7 @@ public class BrazoCommand extends CommandBase{
 
 
         if(selButton.get()){
-          reqHombroPosition = 0.15;
+          reqHombroPosition = 0.004;
           reqWristPosition = 2.0;
           reqArmPosition = 0.4;
           brazo.setArmPositon(reqArmPosition);
@@ -100,7 +100,7 @@ public class BrazoCommand extends CommandBase{
 
         if(aButton.get()){
           if(cube){
-            reqHombroPosition = 0.04;
+            reqHombroPosition = 0.004;
             reqWristPosition = 9.75;
             reqArmPosition = 0.4;
           }
@@ -131,7 +131,7 @@ public class BrazoCommand extends CommandBase{
           else{
             reqWristPosition = 0.1;
             reqArmPosition = 8;
-            reqHombroPosition = 0.39;
+            reqHombroPosition = 0.37;
           }
           hombro.setPosition(reqHombroPosition);
           Timer.delay(0.95);
@@ -178,7 +178,7 @@ public class BrazoCommand extends CommandBase{
           wasArriba = true;
         }
         if(lStickPress.get()){
-          reqHombroPosition = 0.04;
+          reqHombroPosition = 0.15;
           reqWristPosition = 2.0;
           reqArmPosition = 0.4;
           brazo.setArmPositon(reqArmPosition);
