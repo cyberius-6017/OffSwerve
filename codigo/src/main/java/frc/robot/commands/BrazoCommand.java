@@ -15,7 +15,7 @@ public class BrazoCommand extends CommandBase{
     private Hombro hombro;
     private Garra garra;
     private Brazo brazo;
-    private Supplier<Double> rightY, leftTrigger, rightTrigger;
+    private Supplier<Double> rightY, leftY, leftTrigger, rightTrigger;
     private Supplier<Boolean> aButton, bButton, xButton, yButton, selButton, rBump, rStickPress, leftBumper, lStickPress;
 
     private static double reqHombroPosition;
@@ -32,6 +32,7 @@ public class BrazoCommand extends CommandBase{
         this.garra = garra;
         this.brazo = brazo;
         this.rightY = rightY;
+        this.leftY = leftY;
         this.leftTrigger = leftTrigger;
         this.rightTrigger = rightTrigger;
         this.aButton = aButton;
@@ -68,6 +69,18 @@ public class BrazoCommand extends CommandBase{
 
     }
 
+    public static void setReqArm(double reqArm){
+      reqArmPosition = reqArm;
+    }
+
+    public static void setReqHombro(double reqHombro){
+      reqHombroPosition = reqHombro;
+    }
+    
+    public static void setReqWrist(double reqWrist){
+      reqWristPosition = reqWrist;
+    }
+
     @Override
     public void execute(){
         //CONE CUBE
@@ -78,123 +91,84 @@ public class BrazoCommand extends CommandBase{
         }
 
         double rollerSpeed = rightTrigger.get()-leftTrigger.get();
-        //double armPower = brazoSpeed.get();
+       
 
 
         if(selButton.get()){
-          reqHombroPosition = 0.004;
-          reqWristPosition = 2.0;
-          reqArmPosition = 0.4;
-          brazo.setArmPositon(reqArmPosition);
           
-          if(wasArriba){
-            Timer.delay(0.3);
-            hombro.setPosition(reqHombroPosition);
-            Timer.delay(0.5);
-            brazo.setReading(1);
+          if(cube){
+            TimingThread thread = new TimingThread(0.004,0.4,2.0,false, wasArriba);
+            thread.start();
           } else{
-            hombro.setPosition(reqHombroPosition);
+            TimingThread thread = new TimingThread(0.004,0.4,2.0,false, wasArriba);
+            thread.start();
           }
+
+
           wasArriba = false;
         }
 
         if(aButton.get()){
+         
           if(cube){
-            reqHombroPosition = 0.004;
-            reqWristPosition = 9.75;
-            reqArmPosition = 0.4;
-          }
-          else{
-            reqHombroPosition = 0.04;
-            reqWristPosition = 13.9;
-            reqArmPosition = 0.4;
-          }
-          brazo.setArmPositon(reqArmPosition);
-          
-          if(wasArriba){
-            Timer.delay(0.3);
-            hombro.setPosition(reqHombroPosition);
-            Timer.delay(1);
-            brazo.setReading(0.4);
+            TimingThread thread = new TimingThread(0.004,0.4,9.75,false, wasArriba);
+            thread.start();
           } else{
-            hombro.setPosition(reqHombroPosition);
+            TimingThread thread = new TimingThread(0.004,0.4,14.2,false, wasArriba);
+            thread.start();
           }
+
           wasArriba = false;
         }
         if(bButton.get()){
           
           if(cube){
-            reqHombroPosition = 0.4;
-            reqWristPosition = 0.1;
-            reqArmPosition = 0.4;
+            TimingThread thread = new TimingThread(0.2,6,6,true);
+            thread.start();
+          } else{
+            TimingThread thread = new TimingThread(0.39,8,0.1,true);
+            thread.start();
           }
-          else{
-            reqWristPosition = 0.1;
-            reqArmPosition = 8;
-            reqHombroPosition = 0.37;
-          }
-          hombro.setPosition(reqHombroPosition);
-          Timer.delay(0.95);
-          brazo.setArmPositon(reqArmPosition);
+
           wasArriba = true;
         }
         if(yButton.get()){
-          //TODO CUBOS:
-          
-          
+
           if(cube){
-            reqWristPosition = 3.5;
-            reqArmPosition = 5.5;
-            reqHombroPosition = 0.4;
+            TimingThread thread = new TimingThread(0.4,5.5,3.5,true);
+            thread.start();
+          } else{
+            TimingThread thread = new TimingThread(0.385,8.7,8.5,true);
+            thread.start();
           }
-          else{
-            reqWristPosition = 8.5;
-            reqArmPosition = 8.7;
-            reqHombroPosition = 0.385;
-          }
-          hombro.setPosition(reqHombroPosition);
-          Timer.delay(0.95);
-          brazo.setArmPositon(reqArmPosition);
+
           wasArriba = true;
-          
         }
         if(xButton.get()){
-          //TODO CUBOS:
           
 
           if(cube){
-            reqHombroPosition = 0.4;
-            reqWristPosition = 0.3;
-            reqArmPosition = 0.4;
-          
-          } else {
-            reqWristPosition = 3;
-            reqArmPosition = 4.5;
-            reqHombroPosition = 0.37;
+            TimingThread thread = new TimingThread(0.4,0.4,0.3,true);
+            thread.start();
+          } else{
+            TimingThread thread = new TimingThread(0.37,4.5,3,true);
+            thread.start();
           }
-          hombro.setPosition(reqHombroPosition);
-          Timer.delay(0.95);
-          brazo.setArmPositon(reqArmPosition);
+
           wasArriba = true;
         }
         if(lStickPress.get()){
-          reqHombroPosition = 0.15;
-          reqWristPosition = 2.0;
-          reqArmPosition = 0.4;
-          brazo.setArmPositon(reqArmPosition);
           
-          if(wasArriba){
-            Timer.delay(0.3);
-            hombro.setPosition(reqHombroPosition);
-            Timer.delay(0.5);
-            brazo.setReading(1);
+          if(cube){
+            TimingThread thread = new TimingThread(0.15,0.4,2.0,false, wasArriba);
+            thread.start();
           } else{
-            hombro.setPosition(reqHombroPosition);
+            TimingThread thread = new TimingThread(0.15,0.4,2.0,false, wasArriba);
+            thread.start();
           }
+
           wasArriba = false;
         }
-
-        //reqHombroPosition += hombroPoder.get() * 0.01;
 
         if(cube){
           garra.setRoller(-rollerSpeed, cube);
@@ -204,27 +178,25 @@ public class BrazoCommand extends CommandBase{
         }
 
         if(Math.abs(rightY.get())>0.5){
-          garra.setWrist(rightY.get()*0.05);
-          if(rStickPress.get()){
-            garra.setReading(0);
-          }
-        } else{
-          garra.setWristPosition(reqWristPosition);
+         reqWristPosition += rightY.get()*0.02;
+        } 
+        if(rStickPress.get()){
+          garra.setReading(0);
         }
 
+        if(Math.abs(leftY.get()) >0.5){
+          reqArmPosition += leftY.get() * 0.01;
+        }
         if(leftBumper.get()){
-          reqArmPosition -= 0.4;
-          brazo.setArmPositon(reqArmPosition);
           brazo.setReading(0.3);
         }
+       
 
-        
+        hombro.setPosition(reqHombroPosition);
+        brazo.setArmPositon(reqArmPosition);
+        garra.setWristPosition(reqWristPosition);
 
-        
-      
-        SmartDashboard.putNumber("Required hombro", reqHombroPosition);
-        SmartDashboard.putNumber("Arm Position", brazo.getEncoderPosition());
-        SmartDashboard.putNumber("Duty Cycle Hombro", hombro.getDutyCycle());
+
     }
     
   // Called once the command ends or is interrupted.
@@ -242,4 +214,55 @@ public class BrazoCommand extends CommandBase{
 
 
 
+}
+
+
+
+
+class TimingThread extends Thread{
+  double hombro;
+  double arm;
+  double wrist;
+  boolean goingUp;
+  boolean wasUp = false;
+
+  public TimingThread(double hombro, double arm, double wrist, boolean goingUp){
+    this.hombro = hombro;
+    this.arm = arm;
+    this.wrist = wrist;
+    this.goingUp = goingUp;
+  }
+
+  public TimingThread(double hombro, double arm, double wrist, boolean goingUp, boolean wasUp){
+    this.hombro = hombro;
+    this.arm = arm;
+    this.wrist = wrist;
+    this.goingUp = goingUp;
+    this.wasUp = wasUp;
+  }
+
+  public void run(){
+    try{
+      if(goingUp){
+          BrazoCommand.setReqWrist(wrist);
+          BrazoCommand.setReqHombro(hombro);
+          Thread.sleep(950);
+          BrazoCommand.setReqArm(arm);
+
+      } else{
+        BrazoCommand.setReqArm(arm);
+        BrazoCommand.setReqWrist(wrist);
+
+        if(wasUp){
+          Thread.sleep(300);
+          BrazoCommand.setReqHombro(hombro);
+
+        }else{
+          BrazoCommand.setReqHombro(hombro);
+        }
+      }
+    }catch(Exception e){
+      
+    }
+  }
 }
