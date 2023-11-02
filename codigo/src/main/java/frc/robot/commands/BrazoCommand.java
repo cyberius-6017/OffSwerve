@@ -111,10 +111,10 @@ public class BrazoCommand extends CommandBase{
         if(aButton.get()){
          
           if(cube){
-            TimingThread thread = new TimingThread(0.004,0.4,9.75,false, wasArriba);
+            TimingThread thread = new TimingThread(0.004,0.4,10.5,false, wasArriba);
             thread.start();
           } else{
-            TimingThread thread = new TimingThread(0.004,0.4,14.2,false, wasArriba);
+            TimingThread thread = new TimingThread(0.004,0.4,13.9,false, wasArriba);
             thread.start();
           }
 
@@ -126,7 +126,7 @@ public class BrazoCommand extends CommandBase{
             TimingThread thread = new TimingThread(0.2,6,6,true);
             thread.start();
           } else{
-            TimingThread thread = new TimingThread(0.39,8,0.1,true);
+            TimingThread thread = new TimingThread(0.37,8,0.1,true);
             thread.start();
           }
 
@@ -187,6 +187,7 @@ public class BrazoCommand extends CommandBase{
         if(Math.abs(leftY.get()) >0.5){
           reqArmPosition += leftY.get() * 0.01;
         }
+        
         if(leftBumper.get()){
           brazo.setReading(0.3);
         }
