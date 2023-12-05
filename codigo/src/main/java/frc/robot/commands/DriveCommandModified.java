@@ -65,6 +65,7 @@ public class DriveCommandModified extends CommandBase {
     driveTrain.setNormalSpeeds(realXValue, realYValue, realTurnValue, 0.4);
    } else {
     driveTrain.setFieldOrientedSpeeds(realXValue, realYValue, realTurnValue);
+    driveTrain.checkMDriveKinematics(realXValue, realYValue, realTurnValue);
    }
 
 

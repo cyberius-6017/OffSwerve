@@ -8,7 +8,10 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix6.controls.StaticBrake;
+<<<<<<< Updated upstream
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
+=======
+>>>>>>> Stashed changes
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -95,9 +98,18 @@ public class SwerveModule extends SubsystemBase{
           dir = dir + 2 * Constants.pi;
         }
 
+<<<<<<< Updated upstream
 
         turnMotor.set(pSet(dir) * Constants.moduleTurnkP);
         if(state.speedMetersPerSecond < 0.05 && state.speedMetersPerSecond > -0.05){
+=======
+        double error = pSet(dir);
+        turnMotor.set(error * Constants.moduleTurnkP);
+
+
+        
+        if(state.speedMetersPerSecond < 0.05 && state.speedMetersPerSecond > -0.05 || Math.abs(error) > 0.26){
+>>>>>>> Stashed changes
           driveMotor.setControl(brake);
         } else{
           driveMotor.set(state.speedMetersPerSecond * reverse);

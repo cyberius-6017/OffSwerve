@@ -41,11 +41,18 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
 
   private SwerveDriveKinematics kinematics = new SwerveDriveKinematics(flModule.getTranslation2d(), 
   frModule.getTranslation2d(), rlModule.getTranslation2d(), rrModule.getTranslation2d());
+
+  private MauDriveKinematics mKinematics = new MauDriveKinematics(Constants.flTranslationMau, 
+  Constants.frTranslationMau, Constants.rlTranslationMau, Constants.rrTranslationMau);
   
   private SwerveModulePosition[] positions = {flModule.getSwervePosition(), frModule.getSwervePosition(), 
                    rlModule.getSwervePosition(), rrModule.getSwervePosition()};
 
+  private SwerveModuleState[] states = {flModule.getSwerveState(), frModule.getSwerveState(), 
+                    rlModule.getSwerveState(), rrModule.getSwerveState()};
+
   private SwerveDriveOdometry odometry;
+  private MauDriveOdometry mOdometry;
 
   private SwerveDrivePoseEstimator poseEstimator;
 
@@ -57,8 +64,15 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
      
       navx.reset();
       
+<<<<<<< Updated upstream
       odometry = new SwerveDriveOdometry(kinematics, getRotation2d(), positions);
       poseEstimator = new SwerveDrivePoseEstimator(kinematics, getRotation2d(), positions, new Pose2d(0, 0, getRotation2d()));
+=======
+      odometry = new SwerveDriveOdometry(kinematics, getPoseRotation2d(), positions);
+      mOdometry = new MauDriveOdometry(mKinematics);
+
+      poseEstimator = new SwerveDrivePoseEstimator(kinematics, getPoseRotation2d(), positions, new Pose2d(0, 0, getPoseRotation2d()));
+>>>>>>> Stashed changes
 
    
   }
@@ -127,6 +141,27 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
     setModuleStates(kinematics.toSwerveModuleStates(speeds));
   }
 
+  public void checkMDriveKinematics(double xSpeed, double ySpeed, double zSpeed){
+
+    
+    SwerveModuleState[] mStates = mKinematics.makeFieldOrientedStates(xSpeed, ySpeed, zSpeed, getRotation2d().getRadians(), Constants.maxDriveSignal);
+    SwerveModuleState[] wStates = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, zSpeed, getRotation2d()));
+
+
+    SmartDashboard.putNumber("mState 0", mStates[0].speedMetersPerSecond);
+    SmartDashboard.putNumber("wState 0", wStates[0].speedMetersPerSecond);
+    
+    SmartDashboard.putNumber("mState 1", mStates[1].speedMetersPerSecond);
+    SmartDashboard.putNumber("wState 1", wStates[1].speedMetersPerSecond);
+
+    SmartDashboard.putNumber("mState 2", mStates[2].speedMetersPerSecond);
+    SmartDashboard.putNumber("wState 2", wStates[2].speedMetersPerSecond);
+
+    SmartDashboard.putNumber("mState 3", mStates[3].speedMetersPerSecond);
+    SmartDashboard.putNumber("wState 3", wStates[3].speedMetersPerSecond);
+    
+  }
+
   public void setLimitedChassisSpeeds(ChassisSpeeds speeds, double maxSpeed){
     SwerveModuleState[] states = kinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(states, maxSpeed); 
@@ -174,7 +209,15 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
       zSpeed *= (1+ minimum);
     }
 
-    setChassisSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, zSpeed, getRotation2d()));
+
+    //setChassisSpeeds(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, zSpeed, getRotation2d()));
+    setMauOrientedSpeeds(xSpeed, ySpeed, zSpeed);
+  }
+
+  private void setMauOrientedSpeeds(double xSpeed,double ySpeed,double zSpeed){
+
+    SwerveModuleState[] states = mKinematics.makeFieldOrientedStates(xSpeed, ySpeed, zSpeed, getRotation2d().getRadians(), Constants.maxDriveSignal);
+    setModuleStates(states);
   }
 
   public void setDesaturatedFieldOrientedAutoSpeeds(double xSpeed, double ySpeed, double zSpeed, double maxSpeed){
@@ -245,15 +288,75 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
     odometry.update(getRotation2d(), positions);
     poseEstimator.update(getRotation2d(), positions);
 
+<<<<<<< Updated upstream
     SmartDashboard.putNumber("fl angle", flModule.getAdjRadians());
     SmartDashboard.putNumber("fr angle", frModule.getAdjRadians());
     SmartDashboard.putNumber("rl angle", rlModule.getAdjRadians());
     SmartDashboard.putNumber("rr angle", rrModule.getAdjRadians());
+=======
+    states[0] = flModule.getSwerveState();
+    states[1] = frModule.getSwerveState();
+    states[2] = rlModule.getSwerveState();
+    states[3] = rrModule.getSwerveState();
+    mOdometry.updateWithStates(states, getRotation2d().getRadians());
+
+
+    checkMDriveKinematics(0.5, 0.5, 0.1);
+
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+>>>>>>> Stashed changes
 
     
 
+<<<<<<< Updated upstream
     
     SmartDashboard.putString("Pose", getPose2d().getTranslation().toString());
+=======
+      visionMeasurement = new Pose2d(poseNums[0], poseNums[1], getPoseRotation2d());
+      poseEstimator.addVisionMeasurement(visionMeasurement, Timer.getFPGATimestamp());
+    }
+    field2d.setRobotPose(odometry.getPoseMeters());
+
+    toggleBrake();
+
+    SmartDashboard.putData(field2d);
+    SmartDashboard.putString("Pose Estimate", poseEstimator.getEstimatedPosition().getTranslation().toString());
+    SmartDashboard.putString("Odometry  Pose", getPose2d().getTranslation().toString());
+    SmartDashboard.putString("mau Pose", mOdometry.getPose2d().toString());
+  }
+
+  public void setOdoToLimelight(){
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+    poseNums = table.getEntry("botpose_wpiblue").getDoubleArray(poseNums);
+
+    visionMeasurement = new Pose2d(poseNums[0], poseNums[1], getPoseRotation2d());
+    double rotation = getPoseRotation2d().getRadians();
+    rotation += Constants.pi/2;
+    if(rotation > 2*Constants.pi){
+      rotation-= 2*Constants.pi;
+    }
+    odometry.resetPosition(new Rotation2d(rotation), positions, visionMeasurement);
+  }
+
+  public void updateOdo(){
+    positions[0] = flModule.getSwervePosition();
+    positions[1] = frModule.getSwervePosition(); 
+    positions[2] = rlModule.getSwervePosition();
+    positions[3] = rrModule.getSwervePosition(); 
+    odometry.update(getPoseRotation2d(), positions);
+    poseEstimator.update(getPoseRotation2d(), positions);
+
+    NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+
+    if(table.getEntry("tv").getDouble(0) == 1){
+      poseNums = table.getEntry("botpose_wpiblue").getDoubleArray(poseNums);
+
+      visionMeasurement = new Pose2d(poseNums[0], poseNums[1], getRotation2d());
+      poseEstimator.addVisionMeasurement(visionMeasurement, Timer.getFPGATimestamp());
+    }
+    field2d.setRobotPose(poseEstimator.getEstimatedPosition());
+
+>>>>>>> Stashed changes
   }
 
   public Pose2d getPose2d(){

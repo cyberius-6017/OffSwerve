@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -44,6 +46,7 @@ public final class Constants {
     public static final double maxDriveSignal = 0.85;
     public static final double driftMinimum = 0.1;
 
+<<<<<<< Updated upstream
     /////////////MECANISMOS////////////////////////
     //TODO: Revisar ID's
 
@@ -53,6 +56,8 @@ public final class Constants {
     public static final int hombroId3 = 12;
     public static final int hombroId4 = 13;
 
+=======
+>>>>>>> Stashed changes
     //adelante positivo
     //izquierda positivo
     public static final double rrDistanceX = 0.593;
@@ -64,12 +69,19 @@ public final class Constants {
     public static final double frDistanceX = -0.593;
     public static final double frDistanceY = -0.593;
 
+    public static final Translation2d flTranslationMau = new Translation2d(frDistanceX, frDistanceY);
+    public static final Translation2d frTranslationMau = new Translation2d(rrDistanceX, rrDistanceY);
+    public static final Translation2d rlTranslationMau = new Translation2d(flDistanceX, flDistanceY);
+    public static final Translation2d rrTranslationMau = new Translation2d(rlDistanceX, rlDistanceY);
+    
+
     //                                            perímetro  in2m   reducción: 8.14:1
     public static final double driveRevs2Meters = 4 * pi / (39.37 * 8.14);
     //                                                     100ms a segundos
     public static final double driveRPS2MPS = driveRevs2Meters;
     public static final double falconMaxFrequency = 100; // por cambiar
 
+<<<<<<< Updated upstream
     public static final double elevadorRevs2Meters = (11/50) * (18*0.005) * 2; //checar valores
                                     //polea chica a grande * polea a movimiento de banda * 2 etapas
 
@@ -79,6 +91,13 @@ public final class Constants {
 
     public static final double moduleTurnkP = 0.23; 
 
+=======
+    public static final double balancekP = 1/180 * 5;
+
+    public static final double moduleTurnkP = 0.23; 
+
+
+>>>>>>> Stashed changes
   public static class OperatorConstants {
     
   }
