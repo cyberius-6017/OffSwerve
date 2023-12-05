@@ -147,27 +147,6 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
     setModuleStates(kinematics.toSwerveModuleStates(speeds));
   }
 
-  public void checkMDriveKinematics(double xSpeed, double ySpeed, double zSpeed){
-
-    
-    SwerveModuleState[] mStates = mKinematics.makeFieldOrientedStates(xSpeed, ySpeed, zSpeed, getRotation2d().getRadians(), Constants.maxDriveSignal);
-    SwerveModuleState[] wStates = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, zSpeed, getRotation2d()));
-
-
-    SmartDashboard.putNumber("mState 0", mStates[0].speedMetersPerSecond);
-    SmartDashboard.putNumber("wState 0", wStates[0].speedMetersPerSecond);
-    
-    SmartDashboard.putNumber("mState 1", mStates[1].speedMetersPerSecond);
-    SmartDashboard.putNumber("wState 1", wStates[1].speedMetersPerSecond);
-
-    SmartDashboard.putNumber("mState 2", mStates[2].speedMetersPerSecond);
-    SmartDashboard.putNumber("wState 2", wStates[2].speedMetersPerSecond);
-
-    SmartDashboard.putNumber("mState 3", mStates[3].speedMetersPerSecond);
-    SmartDashboard.putNumber("wState 3", wStates[3].speedMetersPerSecond);
-    
-  }
-
   public void setLimitedChassisSpeeds(ChassisSpeeds speeds, double maxSpeed){
     SwerveModuleState[] states = kinematics.toSwerveModuleStates(speeds);
     SwerveDriveKinematics.desaturateWheelSpeeds(states, maxSpeed); 
@@ -300,9 +279,6 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
     states[3] = rrModule.getSwerveState();
     mOdometry.updateWithStates(states, getRotation2d().getRadians());
 
-    
-
-    checkMDriveKinematics(0.5, 0.5, 0.1);
 
     NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
