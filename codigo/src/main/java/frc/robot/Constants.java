@@ -46,18 +46,6 @@ public final class Constants {
     public static final double maxDriveSignal = 0.85;
     public static final double driftMinimum = 0.1;
 
-<<<<<<< Updated upstream
-    /////////////MECANISMOS////////////////////////
-    //TODO: Revisar ID's
-
-    // 1 y 2 van juntos, 3 y 4 van juntos
-    public static final int hombroId1 = 10;
-    public static final int hombroId2 = 11;
-    public static final int hombroId3 = 12;
-    public static final int hombroId4 = 13;
-
-=======
->>>>>>> Stashed changes
     //adelante positivo
     //izquierda positivo
     public static final double rrDistanceX = 0.593;
@@ -81,23 +69,11 @@ public final class Constants {
     public static final double driveRPS2MPS = driveRevs2Meters;
     public static final double falconMaxFrequency = 100; // por cambiar
 
-<<<<<<< Updated upstream
-    public static final double elevadorRevs2Meters = (11/50) * (18*0.005) * 2; //checar valores
-                                    //polea chica a grande * polea a movimiento de banda * 2 etapas
-
-    public static final double wristRevs2Rev = (9/50) * (15/40) * (15/40);
-
-
-
-    public static final double moduleTurnkP = 0.23; 
-
-=======
     public static final double balancekP = 1/180 * 5;
 
     public static final double moduleTurnkP = 0.23; 
 
 
->>>>>>> Stashed changes
   public static class OperatorConstants {
     
   }

@@ -100,9 +100,11 @@ public class SwerveModule extends SubsystemBase{
 
 
         
-        if(state.speedMetersPerSecond < 0.05 && state.speedMetersPerSecond > -0.05 || Math.abs(error) > 0.26){
+        if(state.speedMetersPerSecond < 0.05 && state.speedMetersPerSecond > -0.05){
           driveMotor.setControl(brake);
-        } else{
+        } else if(error > 0.26){
+          driveMotor.setControl(new CoastOut());
+        }else{
           driveMotor.set(state.speedMetersPerSecond * reverse);
 
           //TODO: hacer el PID para que la velocidad de los modulos quede igual (tunear en tuner x y usar ese slot aquí -------------------------------------vv)

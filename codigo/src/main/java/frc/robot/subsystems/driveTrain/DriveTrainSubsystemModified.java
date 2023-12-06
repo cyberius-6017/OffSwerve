@@ -7,7 +7,6 @@ package frc.robot.subsystems.driveTrain;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -143,21 +142,6 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
     SmartDashboard.putNumber("rr req", states[3].angle.getRadians());
   }
 
-  public void setChassisSpeeds(ChassisSpeeds speeds){
-    setModuleStates(kinematics.toSwerveModuleStates(speeds));
-  }
-
-  public void setLimitedChassisSpeeds(ChassisSpeeds speeds, double maxSpeed){
-    SwerveModuleState[] states = kinematics.toSwerveModuleStates(speeds);
-    SwerveDriveKinematics.desaturateWheelSpeeds(states, maxSpeed); 
-
-   
-    flModule.setSwerveState(states[0]);
-    frModule.setSwerveState(states[1]);
-    rlModule.setSwerveState(states[2]);
-    rrModule.setSwerveState(states[3]);
-  }
-
   public void setFieldOrientedSpeeds(double xSpeed, double ySpeed, double zSpeed){
     double minimum = Constants.driftMinimum;
 
@@ -205,24 +189,6 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
     setModuleStates(states);
   }
 
-  public void setDesaturatedFieldOrientedAutoSpeeds(double xSpeed, double ySpeed, double zSpeed, double maxSpeed){
-    double minimum = Constants.driftMinimum * 0.5;
-
-    if(xSpeed >= - minimum && xSpeed <= minimum){
-      xSpeed = 0;
-    }
-    if(ySpeed >= -minimum && ySpeed <= minimum){
-      ySpeed = 0;
-    }
-    if(zSpeed >= - minimum && zSpeed <= minimum){
-      zSpeed = 0;
-    }
-
-    SwerveModuleState[] states = kinematics.toSwerveModuleStates(ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, zSpeed, getRotation2d()));
-    SwerveDriveKinematics.desaturateWheelSpeeds(states ,maxSpeed);
-    setModuleStates(states);
-  }
-
   public void setNormalSpeeds(double xSpeed, double ySpeed, double zSpeed, double maxSpeed){
     double minimum = Constants.driftMinimum;
 
@@ -259,10 +225,9 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
       zSpeed *= (1+ minimum);
     }
 
-    setChassisSpeeds(new ChassisSpeeds(-xSpeed, -ySpeed, zSpeed));
-    setLimitedChassisSpeeds(new ChassisSpeeds(-xSpeed, -ySpeed, zSpeed), maxSpeed);
+    SwerveModuleState[] states = mKinematics.makeFieldOrientedStates(xSpeed, ySpeed, zSpeed, 0, maxSpeed);
+    setModuleStates(states);
   }
-
 
   public void periodic(){
     

@@ -52,6 +52,6 @@ public class RobotContainer {
 
 
 
-    return null;
+    return autoChooser.getSelected();
   }
 }
