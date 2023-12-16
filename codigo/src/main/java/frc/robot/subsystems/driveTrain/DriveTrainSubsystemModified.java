@@ -67,7 +67,7 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
   private Pose2d visionMeasurement;
   private Field2d field2d = new Field2d();
 
-  public DriveTrainSubsystemModified() {
+  public DriveTrainSubsystemModified(Supplier<Boolean> brakeButton) {
 
     //reset yaw navx sin interrumpir código
     //es posible que interfiera en odometría
@@ -79,7 +79,7 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
 
       poseEstimator = new SwerveDrivePoseEstimator(kinematics, getPoseRotation2d(), positions, new Pose2d(0, 0, getPoseRotation2d()));
 
-   
+   this.brakeButton= brakeButton;
   }
 
   public void resetNavx(){
@@ -127,8 +127,6 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
   }
 
   public void setModuleStates(SwerveModuleState[] states){
-    SwerveDriveKinematics.desaturateWheelSpeeds(states, Constants.maxDriveSignal);
-    states[0].speedMetersPerSecond = -states[0].speedMetersPerSecond; //voltear drive motor de fl porque así es
 
    
     flModule.setSwerveState(states[0]);
@@ -136,10 +134,6 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
     rlModule.setSwerveState(states[2]);
     rrModule.setSwerveState(states[3]);
 
-    SmartDashboard.putNumber("fl req", states[0].angle.getRadians());
-    SmartDashboard.putNumber("fr req", states[1].angle.getRadians());
-    SmartDashboard.putNumber("rl req", states[2].angle.getRadians());
-    SmartDashboard.putNumber("rr req", states[3].angle.getRadians());
   }
 
   public void setFieldOrientedSpeeds(double xSpeed, double ySpeed, double zSpeed){
@@ -186,6 +180,14 @@ public class DriveTrainSubsystemModified extends SubsystemBase {
   private void setMauOrientedSpeeds(double xSpeed,double ySpeed,double zSpeed){
 
     SwerveModuleState[] states = mKinematics.makeFieldOrientedStates(xSpeed, ySpeed, zSpeed, getRotation2d().getRadians(), Constants.maxDriveSignal);
+    
+    SmartDashboard.putNumber("fl req", states[0].speedMetersPerSecond);
+    SmartDashboard.putNumber("fr req", states[1].speedMetersPerSecond);
+    SmartDashboard.putNumber("rl req", states[2].speedMetersPerSecond);
+    SmartDashboard.putNumber("rr req", states[3].speedMetersPerSecond);
+
+    SmartDashboard.putNumber("fl angle", states[0].angle.getRadians());
+   
     setModuleStates(states);
   }
 

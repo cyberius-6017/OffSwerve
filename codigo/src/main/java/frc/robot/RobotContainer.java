@@ -9,13 +9,13 @@ import frc.robot.subsystems.driveTrain.DriveTrainSubsystemModified;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.AutoRojoDerecha;
-
-
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
  
 public class RobotContainer {
-  private final DriveTrainSubsystemModified m_DriveTrainSubsystemModified = new DriveTrainSubsystemModified();
+  private final DigitalInput brakeButton = new DigitalInput(0);
+  private final DriveTrainSubsystemModified m_DriveTrainSubsystemModified = new DriveTrainSubsystemModified(() -> brakeButton.get());
  
   private final XboxController driveController = new XboxController(Constants.driveControllerID);
 

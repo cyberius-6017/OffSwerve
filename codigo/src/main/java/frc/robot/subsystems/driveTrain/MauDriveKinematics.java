@@ -3,6 +3,7 @@ package frc.robot.subsystems.driveTrain;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.lang.Math;
 
@@ -49,12 +50,14 @@ public class MauDriveKinematics {
 
             
         }
+
+        SmartDashboard.putNumber("pass amount", passAmount);
         for(int i = 0; i< states.length; i++){
             states[i].speedMetersPerSecond *=  passAmount;
             //reduciendo todas las velocidades proporcionalmente
         }
         
-
+        states[0] = new SwerveModuleState();
         return states;
     }
 

@@ -43,7 +43,7 @@ public final class Constants {
     public static final double frOffset = 0.29;//3.20 + pi;
     public static final double rlOffset = 1.05+ pi;//1.23;
     
-    public static final double maxDriveSignal = 0.85;
+    public static final double maxDriveSignal = 0.5;
     public static final double driftMinimum = 0.1;
 
     //adelante positivo
@@ -57,11 +57,16 @@ public final class Constants {
     public static final double frDistanceX = -0.593;
     public static final double frDistanceY = -0.593;
 
-    public static final Translation2d flTranslationMau = new Translation2d(frDistanceX, frDistanceY);
-    public static final Translation2d frTranslationMau = new Translation2d(rrDistanceX, rrDistanceY);
-    public static final Translation2d rlTranslationMau = new Translation2d(flDistanceX, flDistanceY);
-    public static final Translation2d rrTranslationMau = new Translation2d(rlDistanceX, rlDistanceY);
-    
+    //public static final Translation2d flTranslationMau = new Translation2d(frDistanceX, frDistanceY);
+    //public static final Translation2d frTranslationMau = new Translation2d(rrDistanceX, rrDistanceY);
+    //public static final Translation2d rlTranslationMau = new Translation2d(flDistanceX, flDistanceY);
+    //public static final Translation2d rrTranslationMau = new Translation2d(rlDistanceX, rlDistanceY);
+
+    public static final Translation2d flTranslationMau = new Translation2d(0.593, 0.593);
+    public static final Translation2d frTranslationMau = new Translation2d(0.593, 0.593);
+    public static final Translation2d rlTranslationMau = new Translation2d(-0.593, -0.593);
+    public static final Translation2d rrTranslationMau = new Translation2d(0.593, -0.593);
+
 
     //                                            perímetro  in2m   reducción: 8.14:1
     public static final double driveRevs2Meters = 4 * pi / (39.37 * 8.14);
